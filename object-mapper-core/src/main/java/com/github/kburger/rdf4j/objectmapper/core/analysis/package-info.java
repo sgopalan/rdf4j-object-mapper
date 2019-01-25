@@ -15,7 +15,7 @@
  */
 
 /**
- * APIs for object analysis.
+ *
  */
 @javax.annotation.ParametersAreNonnullByDefault
-package com.github.kburger.rdf4j.objectmapper.api.analysis;
+package com.github.kburger.rdf4j.objectmapper.core.analysis;

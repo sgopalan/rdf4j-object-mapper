@@ -17,7 +17,9 @@ package com.github.kburger.rdf4j.objectmapper.api.analysis;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.Optional;
+import javax.annotation.Nullable;
 
 /**
  * An analysis of a type's property. The analysis contains metadata about the property, like its
@@ -81,9 +83,29 @@ public class PropertyAnalysis<A extends Annotation> {
         return nested;
     }
     
+    @Override
+    public int hashCode() {
+        return Objects.hash(annotation, name, getter, setter, nested);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof PropertyAnalysis) {
+            var other = (PropertyAnalysis<?>)obj;
+            
+            return Objects.equals(annotation, other.annotation) &&
+                    Objects.equals(name, other.name) &&
+                    Objects.equals(getter, other.getter) &&
+                    Objects.equals(setter, other.setter) &&
+                    Objects.equals(nested, other.nested);
+        }
+        
+        return false;
+    }
+    
     /**
      * Creates a {@link Builder} instance to construct a new {@code PropertyAnalysis} object. 
-     * @return
+     * @return builder instance.
      */
     public static <T extends Annotation> Builder<T> builder() {
         return new Builder<>();
@@ -124,8 +146,8 @@ public class PropertyAnalysis<A extends Annotation> {
         }
         
         /**
-         * Sets the {@link PropertyAnalysis#name} property on the {@link #property instance
-         * under construction}.
+         * Sets the {@link PropertyAnalysis#name} property on the {@link #property} instance under
+         * construction.
          * @param name the property's name
          * @return the {@code Builder} instance, allows for method chaining.
          * @throws IllegalStateException if the property has already been set.
@@ -147,7 +169,7 @@ public class PropertyAnalysis<A extends Annotation> {
          * @return the {@code Builder} instance, allows for method chaining.
          * @throws IllegalStateException if the property has already been set.
          */
-        public Builder<T> getter(Method getter) {
+        public Builder<T> getter(@Nullable Method getter) {
             if (property.getter != null) {
                 throw new IllegalStateException("Getter on property is already set");
             }
@@ -164,7 +186,7 @@ public class PropertyAnalysis<A extends Annotation> {
          * @return the {@code Builder} instance, allows for method chaining.
          * @throws IllegalStateException if the property has already been set.
          */
-        public Builder<T> setter(Method setter) {
+        public Builder<T> setter(@Nullable Method setter) {
             if (property.setter != null) {
                 throw new IllegalStateException("Setter on property is already set");
             }

@@ -13,9 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.kburger.rdf4j.objectmapper.core.analysis;
+
+import com.github.kburger.rdf4j.objectmapper.api.exceptions.AbstractMapperException;
 
 /**
- * APIs for object analysis.
+ * Exception specific to the analyzer functionality.
  */
-@javax.annotation.ParametersAreNonnullByDefault
-package com.github.kburger.rdf4j.objectmapper.api.analysis;
+@SuppressWarnings("serial")
+public class AnalysisException extends AbstractMapperException {
+    /**
+     * Constructs a new analysis exception with the specified detail message.
+     * @param message the detail message.
+     */
+    public AnalysisException(String message) {
+        super(message);
+    }
+}

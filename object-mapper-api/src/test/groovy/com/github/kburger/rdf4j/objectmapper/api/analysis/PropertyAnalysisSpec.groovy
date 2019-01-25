@@ -21,7 +21,7 @@ import spock.lang.Ignore
 import spock.lang.Specification
 
 class PropertyAnalysisSpec extends Specification {
-    def "creating a PropertyAnalysis instance through the builder class"() {
+    def "creating a PropertyAnalysis instance through its Builder"() {
         when: "the builder is used to create a complete instance"
         def propertyAnalysis = PropertyAnalysis.builder()
                 .name("test")
@@ -31,7 +31,7 @@ class PropertyAnalysisSpec extends Specification {
                 .nested(true)
                 .build()
         
-        then: "the expected values are returned through the property getters"
+        then: "the expected values are returned through the getters"
         with (propertyAnalysis) {
             name == "test"
             annotation == findAnnotation(StringLiteralClass)
@@ -42,14 +42,14 @@ class PropertyAnalysisSpec extends Specification {
     }
     
     def "invoking a builder method twice"() {
-        given: "a clean builder instance"
+        given: "a fresh builder instance"
         def builder = PropertyAnalysis.builder()
         
         when: "the property builder method is invoked once, no exceptions are expected"
         builder."$method"(arg)
         and: "the method is invoked for the second time"
         builder."$method"(arg)
-        then: "an illegal state exception is expected"
+        then: "an exception is expected"
         thrown IllegalStateException
         
         where:

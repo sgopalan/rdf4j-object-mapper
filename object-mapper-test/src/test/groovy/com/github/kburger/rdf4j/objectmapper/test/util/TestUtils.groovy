@@ -21,11 +21,11 @@ class TestUtils {
     /**
      * Convenience closure for finding {@code annotation} on {@code clazz}.{@code field}.
      * @param clazz target class
-     * @param annotation annotation class
      * @param field field name
+     * @param annotation annotation class
      * @return the annotation on the target field, or {@code null} if not found.
      */
-    public static findAnnotation = { Class clazz, Class annotation = Predicate, String field = "value" ->
+    public static findAnnotation = { Class clazz, String field = "value", Class annotation = Predicate ->
             clazz.declaredFields.find { it.name == field}.getAnnotation(annotation)
     }
     
