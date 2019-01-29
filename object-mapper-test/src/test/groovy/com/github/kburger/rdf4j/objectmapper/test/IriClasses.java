@@ -15,27 +15,27 @@
  */
 package com.github.kburger.rdf4j.objectmapper.test;
 
+import java.net.URI;
+import java.net.URL;
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
-import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.RelativeTypeSubjectClass;
-import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.TypeSubjectClass;
 import lombok.Data;
 
-public class NestingClasses {
+public class IriClasses {
     @Data
-    public static class NestingTypeSubjectClass {
-        @Predicate(Constants.NAMESPACE+"nested")
-        private TypeSubjectClass nested;
+    public static class UrlPropertyClass {
+        @Predicate(Constants.PREDICATE_VALUE)
+        private URL value;
     }
     
     @Data
-    public static class NestingRelativeTypeSubjectClass {
-        @Predicate(Constants.NAMESPACE+"nested")
-        private RelativeTypeSubjectClass nested;
+    public static class UriPropertyClass {
+        @Predicate(Constants.PREDICATE_VALUE)
+        private URI value;
     }
     
     @Data
-    public static class RecursiveNodeClass {
-        @Predicate(Constants.NAMESPACE+"node")
-        private RecursiveNodeClass node;
+    public static class StringUrlPropertyClass {
+        @Predicate(Constants.PREDICATE_VALUE)
+        private String value;
     }
 }

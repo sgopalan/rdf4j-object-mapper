@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.kburger.rdf4j.objectmapper.test;
+package com.github.kburger.rdf4j.objectmapper.api.exceptions;
 
-public class Constants {
-    public static final String NAMESPACE = "http://example.com/";
-    public static final String PREFIX = "ex";
-    
-    public static final String SUBJECT = NAMESPACE + "1";
-    
-    public static final String TYPE = NAMESPACE + "Type";
-    public static final String TYPE_OTHER = NAMESPACE + "Other";
-    
-    public static final String PREDICATE_VALUE = NAMESPACE + "value";
-    public static final String PREDICATE_DESCRIPTION = NAMESPACE + "description";
+/**
+ * Validation related exception.
+ */
+@SuppressWarnings("serial")
+public class ValidationException extends AbstractMapperException {
+    /**
+     * Constructs a new validation exception with the specified detail message.
+     * @param message the detail message.
+     */
+    public ValidationException(String message) {
+        super(message);
+    }
 }

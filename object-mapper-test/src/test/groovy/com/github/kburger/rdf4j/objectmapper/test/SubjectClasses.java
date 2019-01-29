@@ -15,15 +15,12 @@
  */
 package com.github.kburger.rdf4j.objectmapper.test;
 
-public class Constants {
-    public static final String NAMESPACE = "http://example.com/";
-    public static final String PREFIX = "ex";
+import com.github.kburger.rdf4j.objectmapper.annotations.Subject;
+
+public class SubjectClasses {
+    @Subject("http://example.com/nested/1")
+    public static class TypeSubjectClass {}
     
-    public static final String SUBJECT = NAMESPACE + "1";
-    
-    public static final String TYPE = NAMESPACE + "Type";
-    public static final String TYPE_OTHER = NAMESPACE + "Other";
-    
-    public static final String PREDICATE_VALUE = NAMESPACE + "value";
-    public static final String PREDICATE_DESCRIPTION = NAMESPACE + "description";
+    @Subject(value = "nested-1", relative = true)
+    public static class RelativeTypeSubjectClass {}
 }

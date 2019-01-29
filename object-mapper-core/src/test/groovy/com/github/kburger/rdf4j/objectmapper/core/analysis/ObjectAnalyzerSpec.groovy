@@ -23,7 +23,7 @@ import com.github.kburger.rdf4j.objectmapper.test.InheritingClasses.ParentClass
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.StringLiteralClass
 import com.github.kburger.rdf4j.objectmapper.test.MethodAnnotationClasses.MethodPredicateAnnotationClass
 import com.github.kburger.rdf4j.objectmapper.test.MethodAnnotationClasses.MixedFieldMethodAnnotationClass
-import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.NestingStringLiteralClass
+import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.NestingTypeSubjectClass
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.RecursiveNodeClass
 import com.github.kburger.rdf4j.objectmapper.test.TypeClasses.SingleTypeClass
 import spock.lang.Specification
@@ -159,7 +159,7 @@ class ObjectAnalyzerSpec extends Specification {
     
     def "nesting classes "() {
         when:
-        def analysis = analyzer.analyze(NestingStringLiteralClass)
+        def analysis = analyzer.analyze(NestingTypeSubjectClass)
         
         then:
         analyzer.cache.size() == 2
@@ -170,10 +170,10 @@ class ObjectAnalyzerSpec extends Specification {
         }
         and:
         with (analysis.predicates[0]) {
-            annotation == findAnnotation(NestingStringLiteralClass, "nested")
+            annotation == findAnnotation(NestingTypeSubjectClass, "nested")
             name == "nested"
-            getter == findMethodOptional(NestingStringLiteralClass, "getNested")
-            setter == findMethodOptional(NestingStringLiteralClass, "setNested")
+            getter == findMethodOptional(NestingTypeSubjectClass, "getNested")
+            setter == findMethodOptional(NestingTypeSubjectClass, "setNested")
             nested == true
         }
     }
