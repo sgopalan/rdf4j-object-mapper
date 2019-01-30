@@ -17,10 +17,13 @@ package com.github.kburger.rdf4j.objectmapper.core.writer;
 
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Namespace;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
@@ -28,6 +31,7 @@ import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
+import com.github.kburger.rdf4j.objectmapper.api.Module;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectWriterException;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException;
 import com.github.kburger.rdf4j.objectmapper.api.writer.ObjectWriter;
@@ -38,12 +42,14 @@ import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
 /**
  * Core implementation 
  */
-public class CoreObjectWriter implements ObjectWriter<Writer> {
+public class CoreObjectWriter implements ObjectWriter<Writer>, Module.Context {
     /** Factory instance. */
     private static final ValueFactory FACTORY = SimpleValueFactory.getInstance();
     
     /** Class analyzer. */
     private final ClassAnalyzer analyzer;
+    
+    private final List<Namespace> namespaces;
     
     /**
      * Constructs a new writer with the given analyzer.
@@ -51,6 +57,12 @@ public class CoreObjectWriter implements ObjectWriter<Writer> {
      */
     public CoreObjectWriter(ClassAnalyzer analyzer) {
         this.analyzer = analyzer;
+        namespaces = new ArrayList<>();
+    }
+    
+    @Override
+    public void registerNamespace(Namespace namespace) {
+        namespaces.add(namespace);
     }
     
     @Override
@@ -58,6 +70,7 @@ public class CoreObjectWriter implements ObjectWriter<Writer> {
         var analysis = analyzer.analyze(object.getClass());
         
         var builder = new ModelBuilder();
+        namespaces.forEach(builder::setNamespace);
         var model = builder.build();
         
         writeInternal(model, analysis, object, FACTORY.createIRI(subject.toString()));

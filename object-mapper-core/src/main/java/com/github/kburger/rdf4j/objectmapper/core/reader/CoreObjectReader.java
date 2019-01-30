@@ -18,8 +18,9 @@ package com.github.kburger.rdf4j.objectmapper.core.reader;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
@@ -31,6 +32,7 @@ import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.Rio;
+import com.github.kburger.rdf4j.objectmapper.api.Module;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectReaderException;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ArgumentStrategy;
@@ -40,21 +42,36 @@ import com.github.kburger.rdf4j.objectmapper.api.reader.ValueConverter;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalysis;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
 
-public class CoreObjectReader implements ObjectReader<Reader> {
+public class CoreObjectReader implements ObjectReader<Reader>, Module.Context {
     private static final ValueFactory FACTORY = SimpleValueFactory.getInstance();
     
     private final ClassAnalyzer analyzer;
     
-    private Collection<InstanceStrategy.Factory> instanceStrategies;
-    private Collection<ArgumentStrategy.Factory> argumentStrategies;
-    private Map<Class<?>, ValueConverter<?>> converters;
+    private final List<InstanceStrategy.Factory> instanceStrategies;
+    private final List<ArgumentStrategy.Factory> argumentStrategies;
+    private final Map<Class<?>, ValueConverter<?>> converters;
     
     public CoreObjectReader(ClassAnalyzer analyzer) {
         this.analyzer = analyzer;
         
-        instanceStrategies = Collections.emptyList();
-        argumentStrategies = Collections.emptyList();
-        converters = Collections.emptyMap();
+        instanceStrategies = new ArrayList<>();
+        argumentStrategies = new ArrayList<>();
+        converters = new HashMap<>();
+    }
+    
+    @Override
+    public void registerInstanceStrategy(InstanceStrategy.Factory strategy) {
+        instanceStrategies.add(strategy);
+    }
+    
+    @Override
+    public void registerArgumentStrategy(ArgumentStrategy.Factory strategy) {
+        argumentStrategies.add(strategy);
+    }
+    
+    @Override
+    public void registerValueConverter(Class<?> clazz, ValueConverter<?> converter) {
+        converters.put(clazz, converter);
     }
     
     @Override
