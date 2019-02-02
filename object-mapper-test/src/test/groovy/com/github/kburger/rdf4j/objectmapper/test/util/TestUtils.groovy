@@ -26,7 +26,7 @@ class TestUtils {
      * @return the annotation on the target field, or {@code null} if not found.
      */
     public static findAnnotation = { Class clazz, String field = "value", Class annotation = Predicate ->
-            clazz.declaredFields.find { it.name == field}.getAnnotation(annotation)
+            clazz.declaredFields.find { it.name == field}?.getAnnotation(annotation)
     }
     
     /**

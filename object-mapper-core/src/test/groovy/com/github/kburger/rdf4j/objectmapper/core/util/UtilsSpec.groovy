@@ -15,6 +15,10 @@
  */
 package com.github.kburger.rdf4j.objectmapper.core.util
 
+import static com.github.kburger.rdf4j.objectmapper.test.util.TestUtils.*
+import com.github.kburger.rdf4j.objectmapper.test.CollectionClasses.RawCollectionClass
+import com.github.kburger.rdf4j.objectmapper.test.CollectionClasses.StringCollectionClass
+import com.github.kburger.rdf4j.objectmapper.test.CollectionClasses.WildcardCollectionClass
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.StringLiteralClass
 import spock.lang.Specification
 
@@ -34,5 +38,17 @@ class UtilsSpec extends Specification {
         Collection         || true
         List               || true
         StringLiteralClass || false
+    }
+    
+    def "test the generic stuff"() {
+        expect:
+        Utils.inferGenericTypeArgument(findMethod(type)) == result
+        
+        where:
+        type                    || result
+        RawCollectionClass      || Object
+        WildcardCollectionClass || Object
+        StringCollectionClass   || String
+        StringLiteralClass      || String
     }
 }

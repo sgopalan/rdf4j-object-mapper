@@ -13,25 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.kburger.rdf4j.objectmapper.api.reader;
 
-import java.lang.annotation.Annotation;
-import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
-
-public interface InstanceStrategy {
-    <T> void initialize(Class<T> clazz);
-    
-    default <T extends Annotation> boolean requiresElementHandling(PropertyAnalysis<T> property) {
-        return false;
-    }
-    
-    <T extends Annotation> void addProperty(PropertyAnalysis<T> property, Object value);
-    
-    Object build();
-    
-    interface Factory {
-        <T> boolean supports(Class<T> clazz);
-        
-        InstanceStrategy create();
-    }
-}
+/**
+ * Core implementations of instance handling strategies.
+ */
+@javax.annotation.ParametersAreNonnullByDefault
+package com.github.kburger.rdf4j.objectmapper.core.reader.instance;

@@ -15,6 +15,10 @@
  */
 package com.github.kburger.rdf4j.objectmapper.core.util;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.WildcardType;
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 /**
@@ -29,6 +33,8 @@ public final class Utils {
      * considered a system (e.g JDK) class:
      * <ul>
      *   <li>Is the class a primitive type?</li>
+     *   <li>Is the class an array and is its {@link Class#getComponentType() component type}
+     *   primitive?</li>
      *   <li>Does the FQCN indicate it belongs to a JDK package?</li>
      * </ul>
      * @param clazz the target type to check
@@ -45,8 +51,27 @@ public final class Utils {
         return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
     
-    public static String decapitalize(String s) {
-        return Character.toLowerCase(s.charAt(0)) + s.substring(1);
+    public static Class<?> inferGenericTypeArgument(Method getter) {
+        var type = getter.getGenericReturnType();
+        
+        if (type instanceof ParameterizedType == false) {
+            // raw type
+            if (Collection.class.isAssignableFrom((Class<?>)type)) {
+                return Object.class;
+            }
+            
+            // non-generic type
+            return (Class<?>)type;
+        }
+
+        var actualTypeArguments = ((ParameterizedType)type).getActualTypeArguments();
+        
+        // wildcard type
+        if (actualTypeArguments[0] instanceof WildcardType) {
+            return Object.class;
+        }
+        
+        return (Class<?>)actualTypeArguments[0];
     }
     
     /** Private constructor. */
