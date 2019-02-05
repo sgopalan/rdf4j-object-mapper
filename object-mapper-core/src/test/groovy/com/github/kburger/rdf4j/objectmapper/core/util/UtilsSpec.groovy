@@ -42,7 +42,7 @@ class UtilsSpec extends Specification {
     
     def "test the generic stuff"() {
         expect:
-        Utils.inferGenericTypeArgument(findMethod(type)) == result
+        Utils.resolveGenericTypeArgument(findMethod(type)) == result
         
         where:
         type                    || result

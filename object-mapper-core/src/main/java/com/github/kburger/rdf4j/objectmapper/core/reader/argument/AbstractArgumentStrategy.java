@@ -13,26 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.kburger.rdf4j.objectmapper.api.reader;
+package com.github.kburger.rdf4j.objectmapper.core.reader.argument;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
+import com.github.kburger.rdf4j.objectmapper.api.reader.ArgumentStrategy;
+import com.google.common.primitives.Primitives;
 
-public interface ArgumentStrategy<T> {
-    Class<?> getType();
+public abstract class AbstractArgumentStrategy<T> implements ArgumentStrategy<T> {
+    protected Class<?> type;
     
-    <V> void addValue(V value);
+    protected T value;
     
-    T build();
-    
-    default <A extends Annotation> void addInstanceProperty(InstanceStrategy instanceStrategy, PropertyAnalysis<A> property) {
-        instanceStrategy.addProperty(property, build());
+    protected AbstractArgumentStrategy(Class<?> type) {
+        this.type = type;
     }
     
-    interface Factory {
-        <T> boolean supports(Class<T> clazz);
-        
-        ArgumentStrategy<?> create(Method getter, int size);
+    @Override
+    public Class<?> getType() {
+        return Primitives.wrap(type);
+    }
+    
+    @Override
+    public T build() {
+        return value;
     }
 }

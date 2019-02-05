@@ -51,7 +51,7 @@ public final class Utils {
         return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
     
-    public static Class<?> inferGenericTypeArgument(Method getter) {
+    public static Class<?> resolveGenericTypeArgument(Method getter) {
         var type = getter.getGenericReturnType();
         
         if (type instanceof ParameterizedType == false) {

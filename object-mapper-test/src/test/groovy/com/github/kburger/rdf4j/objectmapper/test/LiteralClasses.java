@@ -21,7 +21,19 @@ import lombok.Data;
 public class LiteralClasses {
     @Data
     public static class StringLiteralClass {
-        @Predicate(value = "http://example.com/value", literal = true)
+        @Predicate(value = Constants.PREDICATE_VALUE, literal = true)
         private String value;
+    }
+    
+    @Data
+    public static class IntLiteralClass {
+        @Predicate(value = Constants.PREDICATE_VALUE, literal = true, datatype = "http://www.w3.org/2001/XMLSchema#int")
+        private int value;
+    }
+    
+    @Data
+    public static class IntegerLiteralClass {
+        @Predicate(value = Constants.PREDICATE_VALUE, literal = true, datatype = "http://www.w3.org/2001/XMLSchema#integer")
+        private Integer value;
     }
 }

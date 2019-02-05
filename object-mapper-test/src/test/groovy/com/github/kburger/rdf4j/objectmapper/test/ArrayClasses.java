@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.kburger.rdf4j.objectmapper.api.reader;
+package com.github.kburger.rdf4j.objectmapper.test;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
+import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
+import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.StringLiteralClass;
+import lombok.Data;
 
-public interface ArgumentStrategy<T> {
-    Class<?> getType();
-    
-    <V> void addValue(V value);
-    
-    T build();
-    
-    default <A extends Annotation> void addInstanceProperty(InstanceStrategy instanceStrategy, PropertyAnalysis<A> property) {
-        instanceStrategy.addProperty(property, build());
+public class ArrayClasses {
+    @Data
+    public static class PrimitiveArrayClass {
+        @Predicate(Constants.PREDICATE_VALUE)
+        private String[] value;
     }
     
-    interface Factory {
-        <T> boolean supports(Class<T> clazz);
-        
-        ArgumentStrategy<?> create(Method getter, int size);
+    @Data
+    public static class ComplexArrayClass {
+        @Predicate(Constants.PREDICATE_VALUE)
+        private StringLiteralClass[] value;
     }
 }
