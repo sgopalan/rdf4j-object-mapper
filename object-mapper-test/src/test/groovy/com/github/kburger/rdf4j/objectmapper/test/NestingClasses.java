@@ -35,7 +35,7 @@ public class NestingClasses {
     
     @Data
     public static class RecursiveNodeClass {
-        @Predicate(Constants.NAMESPACE+"node")
+        @Predicate(value = Constants.NAMESPACE+"node", required = false)
         private RecursiveNodeClass node;
     }
 }

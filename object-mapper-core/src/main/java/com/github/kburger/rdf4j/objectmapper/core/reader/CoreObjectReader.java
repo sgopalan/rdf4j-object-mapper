@@ -149,7 +149,8 @@ public class CoreObjectReader implements ObjectReader<Reader>, Module.Context {
                 }
             }
             
-            var argumentStrategy = createArgumentStrategy(property.getGetter().get(), statements.size());
+            var getter = property.getGetter().orElseThrow();
+            var argumentStrategy = createArgumentStrategy(getter, statements.size());
             
             statements.stream()
                     .map(Statement::getObject)

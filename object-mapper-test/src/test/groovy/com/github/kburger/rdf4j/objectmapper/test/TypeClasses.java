@@ -16,6 +16,7 @@
 package com.github.kburger.rdf4j.objectmapper.test;
 
 import com.github.kburger.rdf4j.objectmapper.annotations.Type;
+import lombok.Data;
 
 public class TypeClasses {
     @Type(Constants.TYPE)
@@ -23,4 +24,10 @@ public class TypeClasses {
     
     @Type({ Constants.TYPE, Constants.TYPE_OTHER })
     public static class DualTypeClass {}
+    
+    @Data
+    public static class SettableTypeClass {
+        @Type
+        private String type;
+    }
 }

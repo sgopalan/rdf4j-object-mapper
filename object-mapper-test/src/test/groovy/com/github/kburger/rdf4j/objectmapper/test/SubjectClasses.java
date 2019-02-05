@@ -16,6 +16,7 @@
 package com.github.kburger.rdf4j.objectmapper.test;
 
 import com.github.kburger.rdf4j.objectmapper.annotations.Subject;
+import lombok.Data;
 
 public class SubjectClasses {
     @Subject("http://example.com/nested/1")
@@ -23,4 +24,16 @@ public class SubjectClasses {
     
     @Subject(value = "nested-1", relative = true)
     public static class RelativeTypeSubjectClass {}
+    
+    @Data
+    public static class SettableSubjectClass {
+        @Subject
+        private String subject;
+    }
+    
+    @Data
+    public static class SettableRelativeSubjectClass {
+        @Subject(relative = true)
+        private String subject;
+    }
 }
