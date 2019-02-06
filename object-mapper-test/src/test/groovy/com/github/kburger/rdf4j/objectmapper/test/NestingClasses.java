@@ -16,7 +16,10 @@
 package com.github.kburger.rdf4j.objectmapper.test;
 
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
+import com.github.kburger.rdf4j.objectmapper.test.BeanClasses.BeanExampleClass;
 import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.RelativeTypeSubjectClass;
+import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.SettableSubjectClass;
+import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.ThrowingSubjectGetterClass;
 import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.TypeSubjectClass;
 import lombok.Data;
 
@@ -37,5 +40,23 @@ public class NestingClasses {
     public static class RecursiveNodeClass {
         @Predicate(value = Constants.NAMESPACE+"node", required = false)
         private RecursiveNodeClass node;
+    }
+    
+    @Data
+    public static class NestingSettableSubjectClass {
+        @Predicate(value = Constants.NAMESPACE+"nested")
+        private SettableSubjectClass nested;
+    }
+    
+    @Data
+    public static class NestingNonSubjectAnnotationClass {
+        @Predicate(Constants.NAMESPACE+"nested")
+        private BeanExampleClass nested;
+    }
+    
+    @Data
+    public static class NestingThrowingSubjectGetterClass {
+        @Predicate(Constants.NAMESPACE+"nested")
+        private ThrowingSubjectGetterClass nested;
     }
 }

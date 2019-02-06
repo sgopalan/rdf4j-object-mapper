@@ -22,7 +22,7 @@ import lombok.Data;
 public class ArrayClasses {
     @Data
     public static class PrimitiveArrayClass {
-        @Predicate(Constants.PREDICATE_VALUE)
+        @Predicate(value = Constants.PREDICATE_VALUE, literal = true)
         private String[] value;
     }
     

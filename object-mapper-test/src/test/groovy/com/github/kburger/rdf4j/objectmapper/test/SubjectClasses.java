@@ -36,4 +36,13 @@ public class SubjectClasses {
         @Subject(relative = true)
         private String subject;
     }
+    
+    public static class ThrowingSubjectGetterClass {
+        @Subject
+        private String subject;
+        
+        public String getSubject() {
+            throw new RuntimeException("for testing");
+        }
+    }
 }

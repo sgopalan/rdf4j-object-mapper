@@ -22,20 +22,20 @@ import lombok.Data;
 public class CollectionClasses {
     @Data
     public static class RawCollectionClass {
-        @Predicate(Constants.PREDICATE_VALUE)
+        @Predicate(value = Constants.PREDICATE_VALUE, literal = true)
         @SuppressWarnings("rawtypes")
         private Collection value;
     }
     
     @Data
     public static class WildcardCollectionClass {
-        @Predicate(Constants.PREDICATE_VALUE)
+        @Predicate(value = Constants.PREDICATE_VALUE, literal = true)
         private Collection<?> value;
     }
     
     @Data
     public static class StringCollectionClass {
-        @Predicate(Constants.PREDICATE_VALUE)
+        @Predicate(value = Constants.PREDICATE_VALUE, literal = true)
         private Collection<String> value;
     }
 }

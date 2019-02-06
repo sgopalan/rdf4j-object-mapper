@@ -27,7 +27,7 @@ public class Constants {
     public static final String PREDICATE_VALUE = NAMESPACE + "value";
     public static final String PREDICATE_DESCRIPTION = NAMESPACE + "description";
     
-    public static final String RDF_HEADER = "@prefix " + PREFIX + ": <" + NAMESPACE + "> .";
+    public static final String RDF_HEADER = "@prefix " + PREFIX + ": <" + NAMESPACE + "> .\n";
     
     public static final String EXAMPLE_RDF =
             RDF_HEADER + "\n" +

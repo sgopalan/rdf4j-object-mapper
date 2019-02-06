@@ -40,7 +40,7 @@ import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
 
 /**
- * Core implementation 
+ * Core implementation of the {@link ObjectWriter} functionality.
  */
 public class CoreObjectWriter implements ObjectWriter<Writer>, Module.Context {
     /** Factory instance. */
@@ -102,9 +102,9 @@ public class CoreObjectWriter implements ObjectWriter<Writer>, Module.Context {
             final Optional<Object> content;
             try {
                 content = Optional.ofNullable(getter.invoke(source));
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                //TODO log debug message
-                continue;
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                // TODO consider configuration flags to indicate strictness, and continue the loop if set to non-strict
+                throw new ObjectWriterException("Could not invoke property getter");
             }
             
             var annotation = property.getAnnotation();
@@ -165,8 +165,8 @@ public class CoreObjectWriter implements ObjectWriter<Writer>, Module.Context {
                 var method = getter.orElseThrow(() -> new ObjectWriterException(""));
                 try {
                     subjectContent = Optional.ofNullable(method.invoke(value));
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new ObjectWriterException("");
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                    throw new ObjectWriterException("Could not invoke subject property getter", e);
                 }
             }
             

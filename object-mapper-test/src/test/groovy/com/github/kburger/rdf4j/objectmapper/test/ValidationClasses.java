@@ -43,6 +43,7 @@ public class ValidationClasses {
         private String description;
     }
     
+    @Data
     public static class ReadOnlyPropertyClass {
         @Predicate(value = Constants.PREDICATE_VALUE, literal = true, readonly = true)
         private String value;
