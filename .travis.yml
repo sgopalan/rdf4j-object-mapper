@@ -1,0 +1,10 @@
+language: java
+jdk:
+  - oraclejdk11
+  - openjdk11
+script:
+  - mvn tidy:check com.github.spotbugs:spotbugs-maven-plugin:check license:check -B
+  - mvn verify -B -V --fail-fast
+cache:
+  directories:
+    - $HOME/.m2
