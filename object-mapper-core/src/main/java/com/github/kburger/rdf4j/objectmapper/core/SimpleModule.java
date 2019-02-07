@@ -30,12 +30,14 @@ public class SimpleModule implements Module {
     private final List<ArgumentStrategy.Factory> argumentStrategies;
     private final Map<Class<?>, ValueConverter<?>> converters;
     private final List<Namespace> namespaces;
+    private final Map<Class<?>, Class<?>> mixIns;
     
     public SimpleModule() {
         instanceStrategies = new ArrayList<>();
         argumentStrategies = new ArrayList<>();
         converters = new HashMap<>();
         namespaces = new ArrayList<>();
+        mixIns = new HashMap<>();
     }
     
     public SimpleModule addInstanceStrategy(InstanceStrategy.Factory strategy) {
@@ -58,6 +60,11 @@ public class SimpleModule implements Module {
         return this;
     }
     
+    public <T, U> SimpleModule addMixIn(Class<T> target, Class<U> mixIn) {
+        mixIns.put(target, mixIn);
+        return this;
+    }
+    
     @Override
     public void setup(Context context) {
         instanceStrategies.forEach(context::registerInstanceStrategy);
@@ -67,5 +74,7 @@ public class SimpleModule implements Module {
         converters.forEach(context::registerValueConverter);
         
         namespaces.forEach(context::registerNamespace);
+        
+        mixIns.forEach(context::registerMixIn);
     }
 }

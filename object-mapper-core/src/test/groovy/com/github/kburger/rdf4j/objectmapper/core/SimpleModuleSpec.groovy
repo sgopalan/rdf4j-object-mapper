@@ -52,6 +52,8 @@ class SimpleModuleSpec extends Specification {
         and:
         module.addNamespace(Mock(Namespace))
         and:
+        module.addMixIn(Object, Object)
+        and:
         module.setup(context)
         
         then:
@@ -60,6 +62,7 @@ class SimpleModuleSpec extends Specification {
             1 * registerArgumentStrategy(_)
             1 * registerValueConverter(_, _)
             1 * registerNamespace(_)
+            1 * registerMixIn(_, _)
         }
     }
 }

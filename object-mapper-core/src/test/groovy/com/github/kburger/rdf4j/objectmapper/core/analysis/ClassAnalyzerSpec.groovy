@@ -18,17 +18,20 @@ package com.github.kburger.rdf4j.objectmapper.core.analysis
 import static com.github.kburger.rdf4j.objectmapper.test.util.TestUtils.*
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate
 import com.github.kburger.rdf4j.objectmapper.annotations.Type
+import com.github.kburger.rdf4j.objectmapper.test.BeanClasses.BeanExampleClass
 import com.github.kburger.rdf4j.objectmapper.test.InheritingClasses.ChildClass
 import com.github.kburger.rdf4j.objectmapper.test.InheritingClasses.ParentClass
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.StringLiteralClass
 import com.github.kburger.rdf4j.objectmapper.test.MethodAnnotationClasses.MethodPredicateAnnotationClass
 import com.github.kburger.rdf4j.objectmapper.test.MethodAnnotationClasses.MixedFieldMethodAnnotationClass
+import com.github.kburger.rdf4j.objectmapper.test.MixInClasses.OverridingMixIn
+import com.github.kburger.rdf4j.objectmapper.test.MixInClasses.PreventInheritMixIn
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.NestingTypeSubjectClass
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.RecursiveNodeClass
 import com.github.kburger.rdf4j.objectmapper.test.TypeClasses.SingleTypeClass
 import spock.lang.Specification
 
-class ObjectAnalyzerSpec extends Specification {
+class ClassAnalyzerSpec extends Specification {
     /** Subject under test. */
     def analyzer = new ClassAnalyzer()
     
@@ -184,5 +187,41 @@ class ObjectAnalyzerSpec extends Specification {
         
         then:
         notThrown StackOverflowError
+    }
+    
+    def "properties are ignored when an overriding mix-in type is present"() {
+        given:
+        analyzer.registerMixIn(BeanExampleClass, OverridingMixIn)
+        
+        when:
+        def analysis = analyzer.analyze(BeanExampleClass)
+        
+        then:
+        with (analysis) {
+            type.empty
+            subject.empty
+            predicates.size() == 1
+        }
+        and:
+        with (analysis.predicates[0]) {
+            annotation == findMethod(OverridingMixIn).getAnnotation(Predicate)
+            getter == findMethodOptional(BeanExampleClass)
+        }
+    }
+    
+    def "inherited properties are ignored when a appropriately configured mix-in type is present"() {
+        given:
+        analyzer.registerMixIn(ChildClass, PreventInheritMixIn)
+        
+        when:
+        def analysis = analyzer.analyze(ChildClass)
+        
+        then:
+        analyzer.cache.size() == 1
+        and:
+        with (analysis.predicates[0]) {
+            annotation == findAnnotation(ChildClass, "childValue")
+            getter == findMethodOptional(ChildClass, "getChildValue")
+        }
     }
 }

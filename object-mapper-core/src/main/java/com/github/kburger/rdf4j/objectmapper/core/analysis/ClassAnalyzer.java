@@ -32,24 +32,33 @@ import org.slf4j.LoggerFactory;
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
 import com.github.kburger.rdf4j.objectmapper.annotations.Subject;
 import com.github.kburger.rdf4j.objectmapper.annotations.Type;
+import com.github.kburger.rdf4j.objectmapper.annotations.ext.MixIn;
+import com.github.kburger.rdf4j.objectmapper.api.Module;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
 import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
 
 /**
  * 
  */
-public class ClassAnalyzer extends AbstractAnalyzer {
+public class ClassAnalyzer extends AbstractAnalyzer implements Module.Context {
     /** Logger instance. */
     private static final Logger logger = LoggerFactory.getLogger(ClassAnalyzer.class);
     
     /** Cached analysis results. */
-    private Map<Class<?>, ClassAnalysis> cache;
+    private final Map<Class<?>, ClassAnalysis> cache;
+    private final MixInAnalyzer mixInAnalyzer;
     
     /**
      * Constructs a new analyzer.
      */
     public ClassAnalyzer() {
         cache = Collections.synchronizedMap(new HashMap<>());
+        mixInAnalyzer = new MixInAnalyzer();
+    }
+    
+    @Override
+    public <T, U> void registerMixIn(Class<T> target, Class<U> mixIn) {
+        mixInAnalyzer.registerMixIn(target, mixIn);
     }
     
     /**
@@ -83,7 +92,12 @@ public class ClassAnalyzer extends AbstractAnalyzer {
         
         var builder = ClassAnalysis.builder();
         
-        if (!Utils.isSystemClass(clazz.getSuperclass())) {
+        var mixInAnnotation = mixInAnalyzer.analyze(clazz, builder);
+        
+        var inheritFlag = mixInAnnotation.map(MixIn::inherit).orElse(MixIn.DEFAULT_INHERIT);
+        var overrideFlag = mixInAnnotation.map(MixIn::override).orElse(MixIn.DEFAULT_OVERRIDE);
+        
+        if (inheritFlag && !Utils.isSystemClass(clazz.getSuperclass())) {
             var parent = analyzeInternal(clazz.getSuperclass(), stack);
             
             parent.getType()
@@ -96,11 +110,13 @@ public class ClassAnalyzer extends AbstractAnalyzer {
                     .forEach(builder::predicate);
         }
         
-        addTypeProperty(clazz, builder);
-        addSubjectProperty(clazz, builder);
-        
-        for (var property : getTypeInfo(clazz)) {
-            analyzeProperty(clazz, property, builder, stack);
+        if (!overrideFlag) {
+            addTypeProperty(clazz, builder);
+            addSubjectProperty(clazz, builder);
+            
+            for (var property : getTypeInfo(clazz)) {
+                analyzeProperty(clazz, property, builder, stack);
+            }
         }
         
         var analysis = builder.build();
@@ -195,7 +211,6 @@ public class ClassAnalyzer extends AbstractAnalyzer {
         }
         
         return Optional.ofNullable(property.getRead())
-                .filter(getter -> getter.isAnnotationPresent(annotation))
                 .map(getter -> getter.getAnnotation(annotation));
     }
     

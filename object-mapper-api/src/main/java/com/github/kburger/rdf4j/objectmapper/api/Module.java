@@ -44,5 +44,9 @@ public interface Module {
         default void registerNamespace(String prefix, String namespace) {
             registerNamespace(new SimpleNamespace(prefix, namespace));
         }
+        
+        default <T, U> void registerMixIn(Class<T> target, Class<U> mixIn) {
+            // empty default impl
+        }
     }
 }
