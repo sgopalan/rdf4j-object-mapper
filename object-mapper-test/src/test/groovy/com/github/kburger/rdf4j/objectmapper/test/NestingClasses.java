@@ -16,6 +16,7 @@
 package com.github.kburger.rdf4j.objectmapper.test;
 
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
+import com.github.kburger.rdf4j.objectmapper.annotations.Subject;
 import com.github.kburger.rdf4j.objectmapper.test.BeanClasses.BeanExampleClass;
 import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.RelativeTypeSubjectClass;
 import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.SettableSubjectClass;
@@ -58,5 +59,19 @@ public class NestingClasses {
     public static class NestingThrowingSubjectGetterClass {
         @Predicate(Constants.NAMESPACE+"nested")
         private ThrowingSubjectGetterClass nested;
+    }
+    
+    @Data
+    public static class NestingExampleClass {
+        @Predicate(Constants.NAMESPACE + "nested")
+        private NestedExampleClass nested;
+    }
+    
+    @Data
+    public static class NestedExampleClass {
+        @Subject
+        private String subject;
+        @Predicate(value = Constants.PREDICATE_VALUE, literal = true)
+        private String value;
     }
 }

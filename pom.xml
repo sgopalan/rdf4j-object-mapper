@@ -32,6 +32,7 @@
         <module>object-mapper-annotations</module>
         <module>object-mapper-api</module>
         <module>object-mapper-core</module>
+        <module>object-mapper-repository</module>
         <module>object-mapper-test</module>
     </modules>
 
