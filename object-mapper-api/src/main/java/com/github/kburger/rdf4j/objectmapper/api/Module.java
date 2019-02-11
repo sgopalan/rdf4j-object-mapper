@@ -20,6 +20,7 @@ import org.eclipse.rdf4j.model.impl.SimpleNamespace;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ArgumentStrategy;
 import com.github.kburger.rdf4j.objectmapper.api.reader.InstanceStrategy;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ValueConverter;
+import com.github.kburger.rdf4j.objectmapper.api.writer.DatatypeWrapperStrategy;
 
 public interface Module {
     void setup(Context context);
@@ -43,6 +44,10 @@ public interface Module {
         
         default void registerNamespace(String prefix, String namespace) {
             registerNamespace(new SimpleNamespace(prefix, namespace));
+        }
+        
+        default void registerDatatypeWrapperStrategy(DatatypeWrapperStrategy strategy) {
+            // empty default impl
         }
         
         default <T, U> void registerMixIn(Class<T> target, Class<U> mixIn) {

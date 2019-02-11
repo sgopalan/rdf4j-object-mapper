@@ -18,7 +18,10 @@ package com.github.kburger.rdf4j.objectmapper.core.writer
 import org.eclipse.rdf4j.rio.RDFFormat
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectWriterException
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException
+import com.github.kburger.rdf4j.objectmapper.core.SimpleModule
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer
+import com.github.kburger.rdf4j.objectmapper.core.writer.wrapper.GuavaOptionalWrapperStrategy
+import com.github.kburger.rdf4j.objectmapper.core.writer.wrapper.JavaOptionalWrapperStrategy
 import com.github.kburger.rdf4j.objectmapper.test.Constants
 import com.github.kburger.rdf4j.objectmapper.test.ArrayClasses.PrimitiveArrayClass
 import com.github.kburger.rdf4j.objectmapper.test.BeanClasses.BeanExampleClass
@@ -34,6 +37,8 @@ import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.NestingNonSubje
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.NestingSettableSubjectClass
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.NestingThrowingSubjectGetterClass
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.NestingTypeSubjectClass
+import com.github.kburger.rdf4j.objectmapper.test.OptionalClasses.GuavaOptionalStringClass
+import com.github.kburger.rdf4j.objectmapper.test.OptionalClasses.JavaOptionalStringClass
 import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.SettableSubjectClass
 import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.ThrowingSubjectGetterClass
 import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.TypeSubjectClass
@@ -229,5 +234,37 @@ class CoreObjectWriterSpec extends Specification {
         
         then: "the output contains the expected dynamic value"
         output == rdf("ex:1 ex:nested ex:foo .")
+    }
+    
+    def "writing a java.util.Optional getter property"() {
+        given:
+        new SimpleModule()
+                .addDatatypeWrapperStrategy(new JavaOptionalWrapperStrategy())
+                .setup(writer)
+        and:
+        def object = new JavaOptionalStringClass()
+        object.value = "example"
+        
+        when:
+        def output = write object
+        
+        then:
+        output == rdf("""ex:1 ex:value "example" .""")
+    }
+    
+    def "wiring a guava Optional getter property"() {
+        given:
+        new SimpleModule()
+                .addDatatypeWrapperStrategy(new GuavaOptionalWrapperStrategy())
+                .setup(writer)
+        and:
+        def object = new GuavaOptionalStringClass()
+        object.value = "example"
+        
+        when:
+        def output = write object
+        
+        then:
+        output == rdf("""ex:1 ex:value "example" .""")
     }
 }

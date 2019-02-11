@@ -16,6 +16,7 @@
 package com.github.kburger.rdf4j.objectmapper.core.writer;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
@@ -25,6 +26,7 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
+import com.github.kburger.rdf4j.objectmapper.api.Module;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectWriterException;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException;
 import com.github.kburger.rdf4j.objectmapper.api.writer.DatatypeWrapperStrategy;
@@ -32,17 +34,24 @@ import com.github.kburger.rdf4j.objectmapper.api.writer.ObjectWriter;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalysis;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
-import com.google.common.collect.ImmutableList;
 
-public abstract class AbstractWriterBase<W> implements ObjectWriter<W> {
+public abstract class AbstractWriterBase<W> implements ObjectWriter<W>, Module.Context {
     /** Factory instance. */
     protected static final ValueFactory FACTORY = SimpleValueFactory.getInstance();
     
     /** Class analyzer. */
     protected final ClassAnalyzer analyzer;
     
+    protected final Collection<DatatypeWrapperStrategy> datatypeWrappers;
+    
     public AbstractWriterBase(ClassAnalyzer analyzer) {
         this.analyzer = analyzer;
+        this.datatypeWrappers = new ArrayList<>();
+    }
+    
+    @Override
+    public void registerDatatypeWrapperStrategy(DatatypeWrapperStrategy strategy) {
+        datatypeWrappers.add(strategy);
     }
     
     /**
@@ -72,7 +81,7 @@ public abstract class AbstractWriterBase<W> implements ObjectWriter<W> {
             try {
                 var intermediate = getter.invoke(source);
                 
-                content = wrapStrats.stream()
+                content = datatypeWrappers.stream()
                         .filter(strategy -> strategy.supports(intermediate))
                         .findFirst()
                         .filter(strat -> strat.isPresent(intermediate))
@@ -111,7 +120,6 @@ public abstract class AbstractWriterBase<W> implements ObjectWriter<W> {
         }
     }
     
-    private Collection<DatatypeWrapperStrategy> wrapStrats = ImmutableList.of(new JavaOptionalWrapperStrategy(), new GuavaOptionalWrapperStrategy());
     /**
      * Writes a single statement to the {@code model} sink.
      * @param model the target sink.

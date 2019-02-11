@@ -31,6 +31,8 @@ import com.github.kburger.rdf4j.objectmapper.test.CollectionClasses.StringCollec
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.IntLiteralClass
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.NestingTypeSubjectClass
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.RecursiveNodeClass
+import com.github.kburger.rdf4j.objectmapper.test.OptionalClasses.GuavaOptionalStringClass
+import com.github.kburger.rdf4j.objectmapper.test.OptionalClasses.JavaOptionalStringClass
 import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.SettableRelativeSubjectClass
 import com.github.kburger.rdf4j.objectmapper.test.SubjectClasses.SettableSubjectClass
 import com.github.kburger.rdf4j.objectmapper.test.TypeClasses.SettableTypeClass
@@ -244,5 +246,21 @@ class CoreObjectReaderSpec extends Specification {
         bean.node.node != null // ex:2 ex:node ex:3
         bean.node.node.node != null // ex:3 ex:node ex:4
         bean.node.node.node.node == null // ex:4 is not defined
+    }
+    
+    def "reading a java.util.Optional wrapped property getter"() {
+        when:
+        def bean = read JavaOptionalStringClass
+        
+        then:
+        bean.value == java.util.Optional.of("example")
+    }
+    
+    def "reading a guava Optional wrapped property getter"() {
+        when:
+        def bean = read GuavaOptionalStringClass
+        
+        then:
+        bean.value == com.google.common.base.Optional.of("example")
     }
  }

@@ -24,12 +24,14 @@ import com.github.kburger.rdf4j.objectmapper.api.Module;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ArgumentStrategy;
 import com.github.kburger.rdf4j.objectmapper.api.reader.InstanceStrategy;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ValueConverter;
+import com.github.kburger.rdf4j.objectmapper.api.writer.DatatypeWrapperStrategy;
 
 public class SimpleModule implements Module {
     private final List<InstanceStrategy.Factory> instanceStrategies;
     private final List<ArgumentStrategy.Factory> argumentStrategies;
     private final Map<Class<?>, ValueConverter<?>> converters;
     private final List<Namespace> namespaces;
+    private final List<DatatypeWrapperStrategy> datatypeWrapperStrategies;
     private final Map<Class<?>, Class<?>> mixIns;
     
     public SimpleModule() {
@@ -37,6 +39,7 @@ public class SimpleModule implements Module {
         argumentStrategies = new ArrayList<>();
         converters = new HashMap<>();
         namespaces = new ArrayList<>();
+        datatypeWrapperStrategies = new ArrayList<>();
         mixIns = new HashMap<>();
     }
     
@@ -60,6 +63,11 @@ public class SimpleModule implements Module {
         return this;
     }
     
+    public SimpleModule addDatatypeWrapperStrategy(DatatypeWrapperStrategy strategy) {
+        datatypeWrapperStrategies.add(strategy);
+        return this;
+    }
+    
     public <T, U> SimpleModule addMixIn(Class<T> target, Class<U> mixIn) {
         mixIns.put(target, mixIn);
         return this;
@@ -74,6 +82,8 @@ public class SimpleModule implements Module {
         converters.forEach(context::registerValueConverter);
         
         namespaces.forEach(context::registerNamespace);
+        
+        datatypeWrapperStrategies.forEach(context::registerDatatypeWrapperStrategy);
         
         mixIns.forEach(context::registerMixIn);
     }

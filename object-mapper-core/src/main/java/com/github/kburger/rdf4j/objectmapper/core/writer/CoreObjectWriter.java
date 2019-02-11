@@ -22,14 +22,13 @@ import org.eclipse.rdf4j.model.Namespace;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
-import com.github.kburger.rdf4j.objectmapper.api.Module;
 import com.github.kburger.rdf4j.objectmapper.api.writer.ObjectWriter;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
 
 /**
  * Core implementation of the {@link ObjectWriter} functionality.
  */
-public class CoreObjectWriter extends AbstractWriterBase<Writer> implements Module.Context {
+public class CoreObjectWriter extends AbstractWriterBase<Writer> {
     private final List<Namespace> namespaces;
     
     /**

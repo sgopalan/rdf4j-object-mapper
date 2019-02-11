@@ -39,7 +39,7 @@ import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalysis;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
 
-public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.Context  {
+public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.Context {
     protected static final ValueFactory FACTORY = SimpleValueFactory.getInstance();
     
     protected final ClassAnalyzer analyzer;
