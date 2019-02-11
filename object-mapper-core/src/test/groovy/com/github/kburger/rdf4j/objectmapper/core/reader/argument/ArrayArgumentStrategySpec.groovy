@@ -23,14 +23,10 @@ import com.github.kburger.rdf4j.objectmapper.test.BeanClasses.BeanExampleClass
 import com.github.kburger.rdf4j.objectmapper.test.BuilderClasses.BuilderExampleClass
 import com.github.kburger.rdf4j.objectmapper.test.ConstructorClasses.ConstructorExampleClass
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.StringLiteralClass
-import com.github.kburger.rdf4j.objectmapper.test.util.TestUtils
 import spock.lang.Shared
-import spock.lang.Specification
 
-class ArrayArgumentStrategySpec extends Specification {
+class ArrayArgumentStrategySpec extends BaseArgumentStrategySpec {
     @Shared factory = new Factory()
-    
-    def create = { clz, n = 1 -> factory.create(TestUtils.findMethod(clz), n) }
     
     def "factory support verification"() {
         expect:
@@ -65,7 +61,7 @@ class ArrayArgumentStrategySpec extends Specification {
     
     def "overflowing arguments are handled"() {
         given:
-        def strategy = create(PrimitiveArrayClass, 1)
+        def strategy = create(PrimitiveArrayClass, "value", 1)
         
         when:
         strategy.addValue("first")
@@ -78,7 +74,7 @@ class ArrayArgumentStrategySpec extends Specification {
     
     def "verify the added values"() {
         given:
-        def strategy = create(PrimitiveArrayClass, 3)
+        def strategy = create(PrimitiveArrayClass, "value", 3)
         
         when:
         strategy.addValue("first")

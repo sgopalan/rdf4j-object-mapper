@@ -131,7 +131,7 @@ public class ClassAnalyzer extends AbstractAnalyzer implements Module.Context {
      * @param target
      * @return
      */
-    private <T> Collection<PropertyInfo> getTypeInfo(Class<T> target) {
+    private static <T> Collection<PropertyInfo> getTypeInfo(Class<T> target) {
         var fields = target.getDeclaredFields();
         var properties = new ArrayList<PropertyInfo>(fields.length);
         
@@ -222,8 +222,8 @@ public class ClassAnalyzer extends AbstractAnalyzer implements Module.Context {
      */
     private <A extends Annotation> PropertyAnalysis.Builder<A> preparePropertyAnalysis(Optional<A> annotation, PropertyInfo property) {
         return PropertyAnalysis.<A>builder()
-                .name(property.getField().getName())
                 .annotation(annotation.get())
+                .field(property.getField())
                 .getter(property.getRead())
                 .setter(property.getWrite());
     }

@@ -13,23 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.kburger.rdf4j.objectmapper.core.reader.instance
+package com.github.kburger.rdf4j.objectmapper.core.reader.argument
 
-import static com.github.kburger.rdf4j.objectmapper.test.util.TestUtils.*
-import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis
 import com.github.kburger.rdf4j.objectmapper.core.util.Utils
+import com.github.kburger.rdf4j.objectmapper.test.util.TestUtils
 import spock.lang.Specification
 
-abstract class BaseInstanceStrategySpec extends Specification {
-    /**
-     * Convenience closure.
-     */
-    def prop = { Class clz, String name = "value" -> 
-        PropertyAnalysis.builder()
-                .annotation(findAnnotation(clz, name))
-                .field(findField(clz, name))
-                .getter(findMethod(clz, "get${Utils.capitalize(name)}"))
-                .setter(findMethod(clz, "set${Utils.capitalize(name)}"))
-                .build()
+abstract class BaseArgumentStrategySpec extends Specification {
+    def create = { Class clz, String name = "value", int n = 1 ->
+        def field = TestUtils.findField(clz)
+        def type = Utils.resolveTypeArgument(field)
+        return factory.create(type, n)
     }
 }

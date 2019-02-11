@@ -200,7 +200,7 @@ class CoreObjectReaderSpec extends Specification {
         
         then: "an exception is expected detailing the need for a specific value converter"
         def ex = thrown(ObjectReaderException)
-        ex.message == "Could not find a value converter" 
+        ex.message == "Could not find a value converter for type java.lang.Integer"
     }
     
     def "reading a supported value converter"() {

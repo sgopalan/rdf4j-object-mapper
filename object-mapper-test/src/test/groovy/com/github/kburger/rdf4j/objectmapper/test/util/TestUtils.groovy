@@ -18,6 +18,8 @@ package com.github.kburger.rdf4j.objectmapper.test.util
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate
 
 class TestUtils {
+    public static findField = { Class clazz, String field = "value" -> clazz.declaredFields.find { it.name == field } }
+    
     /**
      * Convenience closure for finding {@code annotation} on {@code clazz}.{@code field}.
      * @param clazz target class
@@ -26,7 +28,7 @@ class TestUtils {
      * @return the annotation on the target field, or {@code null} if not found.
      */
     public static findAnnotation = { Class clazz, String field = "value", Class annotation = Predicate ->
-            clazz.declaredFields.find { it.name == field}?.getAnnotation(annotation)
+            TestUtils.findField(clazz, field)?.getAnnotation(annotation)
     }
     
     /**

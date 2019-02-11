@@ -22,14 +22,10 @@ import com.github.kburger.rdf4j.objectmapper.test.CollectionClasses.RawCollectio
 import com.github.kburger.rdf4j.objectmapper.test.CollectionClasses.StringCollectionClass
 import com.github.kburger.rdf4j.objectmapper.test.CollectionClasses.WildcardCollectionClass
 import com.github.kburger.rdf4j.objectmapper.test.ConstructorClasses.ConstructorExampleClass
-import com.github.kburger.rdf4j.objectmapper.test.util.TestUtils
 import spock.lang.Shared
-import spock.lang.Specification
 
-class CollectionArgumentStrategySpec extends Specification {
+class CollectionArgumentStrategySpec extends BaseArgumentStrategySpec {
     @Shared factory = new Factory()
-    
-    def create = { clz, n = 1 -> factory.create(TestUtils.findMethod(clz), n) }
     
     def "factory type support verification"() {
         expect:
@@ -69,7 +65,7 @@ class CollectionArgumentStrategySpec extends Specification {
     
     def "happy flow"() {
         given:
-        def strategy = create(StringCollectionClass, 3)
+        def strategy = create(StringCollectionClass, "value", 3)
         
         when:
         strategy.addValue("first")

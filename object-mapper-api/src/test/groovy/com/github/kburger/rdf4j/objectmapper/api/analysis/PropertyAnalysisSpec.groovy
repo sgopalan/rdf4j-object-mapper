@@ -17,15 +17,14 @@ package com.github.kburger.rdf4j.objectmapper.api.analysis
 
 import static com.github.kburger.rdf4j.objectmapper.test.util.TestUtils.*
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.StringLiteralClass
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class PropertyAnalysisSpec extends Specification {
     def "creating a PropertyAnalysis instance through its Builder"() {
         when: "the builder is used to create a complete instance"
         def propertyAnalysis = PropertyAnalysis.builder()
-                .name("test")
                 .annotation(findAnnotation(StringLiteralClass))
+                .field(findField(StringLiteralClass))
                 .getter(findMethod(StringLiteralClass))
                 .setter(findMethod(StringLiteralClass, "setValue"))
                 .nested(true)
@@ -33,8 +32,9 @@ class PropertyAnalysisSpec extends Specification {
         
         then: "the expected values are returned through the getters"
         with (propertyAnalysis) {
-            name == "test"
             annotation == findAnnotation(StringLiteralClass)
+            field == Optional.of(findField(StringLiteralClass))
+            name == Optional.of("value")
             getter == findMethodOptional(StringLiteralClass)
             setter == findMethodOptional(StringLiteralClass, "setValue")
             nested == true
@@ -54,8 +54,8 @@ class PropertyAnalysisSpec extends Specification {
         
         where:
         method       | arg
-        "name"       | "test"
         "annotation" | findAnnotation(StringLiteralClass)
+        "field"      | findField(StringLiteralClass)
         "getter"     | findMethod(StringLiteralClass)
         "setter"     | findMethod(StringLiteralClass, "setValue")
         "nested"     | true

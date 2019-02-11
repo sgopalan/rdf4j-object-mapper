@@ -16,17 +16,15 @@
 package com.github.kburger.rdf4j.objectmapper.core.reader.argument;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ArgumentStrategy;
 import com.github.kburger.rdf4j.objectmapper.api.reader.InstanceStrategy;
-import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
 
 public class CollectionArgumentStrategy extends AbstractArgumentStrategy<Collection<Object>> {
-    public CollectionArgumentStrategy(Method getter, int size) {
-        super(Utils.resolveGenericTypeArgument(getter));
+    public CollectionArgumentStrategy(Class<?> type, int size) {
+        super(type);
         this.value = new ArrayList<>(size);
     }
     
@@ -52,8 +50,8 @@ public class CollectionArgumentStrategy extends AbstractArgumentStrategy<Collect
         }
         
         @Override
-        public ArgumentStrategy<?> create(Method getter, int size) {
-            return new CollectionArgumentStrategy(getter, size);
+        public <T> ArgumentStrategy<?> create(Class<T> field, int size) {
+            return new CollectionArgumentStrategy(field, size);
         }
     }
 }

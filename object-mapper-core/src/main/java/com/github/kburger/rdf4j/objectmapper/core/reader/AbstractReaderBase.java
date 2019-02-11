@@ -15,7 +15,8 @@
  */
 package com.github.kburger.rdf4j.objectmapper.core.reader;
 
-import java.lang.reflect.Method;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,7 @@ import com.github.kburger.rdf4j.objectmapper.api.reader.ObjectReader;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ValueConverter;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalysis;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
+import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
 
 public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.Context  {
     protected static final ValueFactory FACTORY = SimpleValueFactory.getInstance();
@@ -79,28 +81,28 @@ public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.C
         instanceStrategy.initialize(clazz);
         
         // set type
-        analysis.getType().ifPresent(type -> {
-            type.getGetter().ifPresent(getter -> {
-                var types = model.filter(subject, RDF.TYPE, null);
-                
-                var argumentStrategy = createArgumentStrategy(getter, types.size());
-                
-                types.stream()
-                        .map(Statement::getObject)
-                        .map(obj -> readObject(model, false, argumentStrategy.getType(), obj))
-                        .forEach(argumentStrategy::addValue);
-                
-                instanceStrategy.addProperty(type, argumentStrategy.build());
+        analysis.getType().ifPresent(property -> {
+            property.getField().ifPresent(field -> {
+                    var types = model.filter(subject, RDF.TYPE, null);
+                    
+                    var argumentStrategy = createArgumentStrategy(field, types.size());
+                    
+                    types.stream()
+                            .map(Statement::getObject)
+                            .map(obj -> readObject(model, false, argumentStrategy.getType(), obj))
+                            .forEach(argumentStrategy::addValue);
+                    
+                    instanceStrategy.addProperty(property, argumentStrategy.build());
             });
         });
         
         // set subject
-        analysis.getSubject().ifPresent(subjectProperty -> {
-            subjectProperty.getGetter().ifPresent(getter -> {
-                var argumentStrategy = createArgumentStrategy(getter, 1);
+        analysis.getSubject().ifPresent(property -> {
+            property.getField().ifPresent(field -> {
+                var argumentStrategy = createArgumentStrategy(field, 1);
                 
                 final Value subjectValue;
-                if (subjectProperty.getAnnotation().relative()) {
+                if (property.getAnnotation().relative()) {
                     subjectValue = FACTORY.createLiteral(subject.getLocalName());
                 } else {
                     subjectValue = subject;
@@ -108,7 +110,7 @@ public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.C
                 
                 argumentStrategy.addValue(readObject(model, false, argumentStrategy.getType(), subjectValue));
                 
-                instanceStrategy.addProperty(subjectProperty, argumentStrategy.build());
+                instanceStrategy.addProperty(property, argumentStrategy.build());
             });
         });
         
@@ -130,8 +132,8 @@ public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.C
                 }
             }
             
-            var getter = property.getGetter().orElseThrow();
-            var argumentStrategy = createArgumentStrategy(getter, statements.size());
+            var field = property.getField().orElseThrow();
+            var argumentStrategy = createArgumentStrategy(field, statements.size());
             
             statements.stream()
                     .map(Statement::getObject)
@@ -144,11 +146,11 @@ public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.C
         return clazz.cast(instanceStrategy.build());
     }
     
-    private ArgumentStrategy<?> createArgumentStrategy(Method getter, int size) {
+    private <A extends Annotation> ArgumentStrategy<?> createArgumentStrategy(Field field, int size) {
         return argumentStrategies.stream()
-                .filter(factory -> factory.supports(getter.getReturnType()))
+                .filter(factory -> factory.supports(field.getType()))
                 .findFirst()
-                .map(factory -> factory.create(getter, size))
+                .map(factory -> factory.create(Utils.resolveTypeArgument(field), size))
                 .orElseThrow(() -> new ObjectReaderException("Could not find a supporting argument strategy"));
     }
     
@@ -158,7 +160,7 @@ public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.C
             return readInternal(model, targetType, analysis, (IRI)object);
         } else {
             if (!converters.containsKey(targetType)) {
-                throw new ObjectReaderException("Could not find a value converter");
+                throw new ObjectReaderException("Could not find a value converter for type " + targetType.getName());
             }
             
             var converter = converters.get(targetType);

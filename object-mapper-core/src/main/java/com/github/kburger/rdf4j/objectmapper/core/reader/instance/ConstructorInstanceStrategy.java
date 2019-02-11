@@ -48,7 +48,7 @@ public class ConstructorInstanceStrategy implements InstanceStrategy {
 
     @Override
     public <T extends Annotation> void addProperty(PropertyAnalysis<T> property, Object value) {
-        var name = property.getName();
+        var name = property.getName().orElseThrow(() -> new ObjectReaderException("Could not find property name"));
         
         for (int i = 0; i < properties.length; i++) {
             if (properties[i].equals(name)) {

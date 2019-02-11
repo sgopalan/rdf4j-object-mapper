@@ -15,6 +15,8 @@
  */
 package com.github.kburger.rdf4j.objectmapper.core.util;
 
+import java.lang.reflect.AnnotatedParameterizedType;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.WildcardType;
@@ -72,6 +74,29 @@ public final class Utils {
         }
         
         return (Class<?>)actualTypeArguments[0];
+    }
+    
+    public static Class<?> resolveTypeArgument(Field field) {
+        var annotatedType = field.getAnnotatedType();
+        
+        if (annotatedType instanceof AnnotatedParameterizedType == false) {
+            var type = (Class<?>)annotatedType.getType();
+            
+            if (type.getTypeParameters().length > 0) {
+                return Object.class;
+            } else {
+                return type;
+            }
+        }
+        
+        var annotatedParameterizedType = (AnnotatedParameterizedType)annotatedType;
+        var actualTypes = annotatedParameterizedType.getAnnotatedActualTypeArguments();
+        
+        if (actualTypes[0].getType() instanceof WildcardType) {
+            return Object.class;
+        }
+        
+        return (Class<?>)actualTypes[0].getType();
     }
     
     /** Private constructor. */

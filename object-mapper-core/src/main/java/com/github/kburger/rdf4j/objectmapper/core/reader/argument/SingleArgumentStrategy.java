@@ -15,7 +15,6 @@
  */
 package com.github.kburger.rdf4j.objectmapper.core.reader.argument;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectReaderException;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ArgumentStrategy;
@@ -41,10 +40,8 @@ public class SingleArgumentStrategy extends AbstractArgumentStrategy<Object> {
         }
         
         @Override
-        public ArgumentStrategy<?> create(Method getter, int size) {
-            var returnType = getter.getReturnType();
-            
-            return new SingleArgumentStrategy(returnType);
+        public <T> ArgumentStrategy<?> create(Class<T> field, int size) {
+            return new SingleArgumentStrategy(field);
         }
     }
 }

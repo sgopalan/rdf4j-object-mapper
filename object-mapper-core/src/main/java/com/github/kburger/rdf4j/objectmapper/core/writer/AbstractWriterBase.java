@@ -17,6 +17,7 @@ package com.github.kburger.rdf4j.objectmapper.core.writer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
@@ -26,10 +27,12 @@ import org.eclipse.rdf4j.model.vocabulary.RDF;
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectWriterException;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException;
+import com.github.kburger.rdf4j.objectmapper.api.writer.DatatypeWrapperStrategy;
 import com.github.kburger.rdf4j.objectmapper.api.writer.ObjectWriter;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalysis;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
+import com.google.common.collect.ImmutableList;
 
 public abstract class AbstractWriterBase<W> implements ObjectWriter<W> {
     /** Factory instance. */
@@ -60,12 +63,21 @@ public abstract class AbstractWriterBase<W> implements ObjectWriter<W> {
                 });
         
         for (var property : analysis.getPredicates()) {
+            var name = property.getName().orElseThrow();
+            
             var getter = property.getGetter().orElseThrow(() ->
-                    new ObjectWriterException("Could not find getter for property " + property.getName()));
+                    new ObjectWriterException("Could not find getter for property " + name));
             
             final Optional<Object> content;
             try {
-                content = Optional.ofNullable(getter.invoke(source));
+                var intermediate = getter.invoke(source);
+                
+                content = wrapStrats.stream()
+                        .filter(strategy -> strategy.supports(intermediate))
+                        .findFirst()
+                        .filter(strat -> strat.isPresent(intermediate))
+                        .map(strat -> strat.unwrap(intermediate))
+                        .or(() -> Optional.ofNullable(intermediate));
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 // TODO consider configuration flags to indicate strictness, and continue the loop if set to non-strict
                 throw new ObjectWriterException("Could not invoke property getter");
@@ -75,7 +87,7 @@ public abstract class AbstractWriterBase<W> implements ObjectWriter<W> {
             
             if (!content.isPresent()) {
                 if (annotation.required()) {
-                    throw new ValidationException("Missing required property " + property.getName());
+                    throw new ValidationException("Missing required property " + name);
                 } else {
                     //TODO log debug message
                     continue;
@@ -83,7 +95,7 @@ public abstract class AbstractWriterBase<W> implements ObjectWriter<W> {
             }
             
             var predicate = FACTORY.createIRI(annotation.value());
-            var value = content.get();
+            var value = content.orElseThrow();
             
             if (value.getClass().isArray()) {
                 value = Arrays.asList((Object[])value);
@@ -99,6 +111,7 @@ public abstract class AbstractWriterBase<W> implements ObjectWriter<W> {
         }
     }
     
+    private Collection<DatatypeWrapperStrategy> wrapStrats = ImmutableList.of(new JavaOptionalWrapperStrategy(), new GuavaOptionalWrapperStrategy());
     /**
      * Writes a single statement to the {@code model} sink.
      * @param model the target sink.

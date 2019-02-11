@@ -23,14 +23,10 @@ import com.github.kburger.rdf4j.objectmapper.test.ConstructorClasses.Constructor
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.IntLiteralClass
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.IntegerLiteralClass
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.StringLiteralClass
-import com.github.kburger.rdf4j.objectmapper.test.util.TestUtils
 import spock.lang.Shared
-import spock.lang.Specification
 
-class SingleArgumentStrategySpec extends Specification {
+class SingleArgumentStrategySpec extends BaseArgumentStrategySpec {
     @Shared factory = new Factory()
-    
-    def create = { clz -> factory.create(TestUtils.findMethod(clz), 1) }
     
     def "factory type support verification"() {
         expect:

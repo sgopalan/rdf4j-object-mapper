@@ -54,6 +54,8 @@ public class BuilderInstanceStrategy implements InstanceStrategy {
         var method = getter.orElseThrow();
         var type = method.getGenericReturnType();
         
+        //TODO handle optional wrapped getters
+        
         if (type instanceof ParameterizedType == false) {
             return false;
         }
@@ -61,8 +63,10 @@ public class BuilderInstanceStrategy implements InstanceStrategy {
         var types = ((ParameterizedType)type).getActualTypeArguments();
         var builderType = builder.getClass();
         
+        var name = property.getName().orElse("");
+        
         try {
-            builderType.getMethod(property.getName(), (Class<?>)types[0]);
+            builderType.getMethod(name, (Class<?>)types[0]);
         } catch (NoSuchMethodException e) {
             return false;
         }
@@ -73,8 +77,10 @@ public class BuilderInstanceStrategy implements InstanceStrategy {
     @Override
     public <T extends Annotation> void addProperty(PropertyAnalysis<T> property, Object value) {
         var builderType = builder.getClass();
+        var name = property.getName().orElse("");
+        
         try {
-            var builderPropertyMethod = builderType.getMethod(property.getName(), value.getClass());
+            var builderPropertyMethod = builderType.getMethod(name, value.getClass());
             
             builderPropertyMethod.invoke(builder, value);
         } catch (NoSuchMethodException e) {

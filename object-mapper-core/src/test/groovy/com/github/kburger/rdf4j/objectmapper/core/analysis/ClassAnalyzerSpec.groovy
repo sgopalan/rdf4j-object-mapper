@@ -28,6 +28,7 @@ import com.github.kburger.rdf4j.objectmapper.test.MixInClasses.OverridingMixIn
 import com.github.kburger.rdf4j.objectmapper.test.MixInClasses.PreventInheritMixIn
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.NestingTypeSubjectClass
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.RecursiveNodeClass
+import com.github.kburger.rdf4j.objectmapper.test.OptionalClasses.JavaOptionalStringClass
 import com.github.kburger.rdf4j.objectmapper.test.TypeClasses.SingleTypeClass
 import spock.lang.Specification
 
@@ -68,7 +69,8 @@ class ClassAnalyzerSpec extends Specification {
         }
         with (analysis.predicates[0]) {
             annotation == findAnnotation(StringLiteralClass)
-            name == "value"
+            field == Optional.of(findField(StringLiteralClass))
+            name == Optional.of("value")
             getter == findMethodOptional(StringLiteralClass)
             setter == findMethodOptional(StringLiteralClass, "setValue")
             nested == false
@@ -97,7 +99,8 @@ class ClassAnalyzerSpec extends Specification {
         and:
         with (analysis.predicates[0]) {
             annotation == findMethod(MethodPredicateAnnotationClass).getAnnotation(Predicate)
-            name == "value"
+            field == Optional.of(findField(MethodPredicateAnnotationClass))
+            name == Optional.of("value")
             getter == findMethodOptional(MethodPredicateAnnotationClass)
             setter == findMethodOptional(MethodPredicateAnnotationClass, "setValue")
             nested == false
@@ -116,7 +119,8 @@ class ClassAnalyzerSpec extends Specification {
         and:
         with (analysis.predicates[0]) {
             annotation == findAnnotation(MixedFieldMethodAnnotationClass)
-            name == "value"
+            field == Optional.of(findField(MixedFieldMethodAnnotationClass))
+            name == Optional.of("value")
             getter == findMethodOptional(MixedFieldMethodAnnotationClass)
             setter == findMethodOptional(MixedFieldMethodAnnotationClass, "setValue")
             nested == false
@@ -124,7 +128,8 @@ class ClassAnalyzerSpec extends Specification {
         and:
         with (analysis.predicates[1]) {
             annotation == findMethod(MixedFieldMethodAnnotationClass, "getDescription").getAnnotation(Predicate)
-            name == "description"
+            field == Optional.of(findField(MixedFieldMethodAnnotationClass, "description"))
+            name == Optional.of("description")
             getter == findMethodOptional(MixedFieldMethodAnnotationClass, "getDescription")
             setter == findMethodOptional(MixedFieldMethodAnnotationClass, "setDescription")
             nested == false
@@ -145,7 +150,8 @@ class ClassAnalyzerSpec extends Specification {
         and:
         with (analysis.predicates[0]) {
             annotation == findAnnotation(ParentClass, "parentValue")
-            name == "parentValue"
+            field == Optional.of(findField(ParentClass, "parentValue"))
+            name == Optional.of("parentValue")
             getter == findMethodOptional(ParentClass, "getParentValue")
             setter == findMethodOptional(ParentClass, "setParentValue")
             nested == false
@@ -153,7 +159,8 @@ class ClassAnalyzerSpec extends Specification {
         and:
         with (analysis.predicates[1]) {
             annotation == findAnnotation(ChildClass, "childValue")
-            name == "childValue"
+            field == Optional.of(findField(ChildClass, "childValue"))
+            name == Optional.of("childValue")
             getter == findMethodOptional(ChildClass, "getChildValue")
             setter == findMethodOptional(ChildClass, "setChildValue")
             nested == false
@@ -174,7 +181,8 @@ class ClassAnalyzerSpec extends Specification {
         and:
         with (analysis.predicates[0]) {
             annotation == findAnnotation(NestingTypeSubjectClass, "nested")
-            name == "nested"
+            field == Optional.of(findField(NestingTypeSubjectClass, "nested"))
+            name == Optional.of("nested")
             getter == findMethodOptional(NestingTypeSubjectClass, "getNested")
             setter == findMethodOptional(NestingTypeSubjectClass, "setNested")
             nested == true
@@ -222,6 +230,16 @@ class ClassAnalyzerSpec extends Specification {
         with (analysis.predicates[0]) {
             annotation == findAnnotation(ChildClass, "childValue")
             getter == findMethodOptional(ChildClass, "getChildValue")
+        }
+    }
+    
+    def "java.util.Optional wrapped property getters are found"() {
+        when:
+        def analysis = analyzer.analyze(JavaOptionalStringClass)
+        
+        then:
+        with (analysis.predicates[0]) {
+            getter == findMethodOptional(JavaOptionalStringClass)
         }
     }
 }

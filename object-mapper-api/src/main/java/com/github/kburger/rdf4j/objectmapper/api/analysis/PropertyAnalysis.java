@@ -16,6 +16,7 @@
 package com.github.kburger.rdf4j.objectmapper.api.analysis;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,8 +30,8 @@ import javax.annotation.Nullable;
 public class PropertyAnalysis<A extends Annotation> {
     /** Property's annotation. */
     private A annotation;
-    /** Property's name. */
-    private String name;
+    /** Property field. */
+    private Field field;
     /** Property's getter, could be absent. */
     private Method getter;
     /** Property's setter, could be absent. */
@@ -48,19 +49,28 @@ public class PropertyAnalysis<A extends Annotation> {
     public A getAnnotation() {
         return annotation;
     }
+
+    /**
+     * Returns the underlying property field.
+     * @return an {@link Optional} containing the underlying field; otherwise {@link Optional#empty()}.
+     */
+    public Optional<Field> getField() {
+        return Optional.ofNullable(field);
+    }
     
     /**
      * Returns the property name.
-     * @return a non-null string.
+     * @return an {@link Optional} containing the property name; otherwise {@link Optional#empty()}.
      */
-    public String getName() {
-        return name;
+    public Optional<String> getName() {
+        return Optional.ofNullable(field)
+                .map(Field::getName);
     }
     
     /**
      * Returns the property's getter, which could be absent e.g. if the property exists on a type
      * level.
-     * @return an {@link Optional} containing the getter method; otherwise {@link Optional#empty()}
+     * @return an {@link Optional} containing the getter method; otherwise {@link Optional#empty()}.
      */
     public Optional<Method> getGetter() {
         return Optional.ofNullable(getter);
@@ -68,7 +78,7 @@ public class PropertyAnalysis<A extends Annotation> {
     
     /**
      * Returns the property's setter, which could be absent e.g. if the parent class is immutable.
-     * @return an {@link Optional} containing the setter method; otherwise {@link Optional#empty()}
+     * @return an {@link Optional} containing the setter method; otherwise {@link Optional#empty()}.
      */
     public Optional<Method> getSetter() {
         return Optional.ofNullable(setter);
@@ -85,7 +95,7 @@ public class PropertyAnalysis<A extends Annotation> {
     
     @Override
     public int hashCode() {
-        return Objects.hash(annotation, name, getter, setter, nested);
+        return Objects.hash(annotation, field, getter, setter, nested);
     }
     
     @Override
@@ -94,7 +104,7 @@ public class PropertyAnalysis<A extends Annotation> {
             var other = (PropertyAnalysis<?>)obj;
             
             return Objects.equals(annotation, other.annotation) &&
-                    Objects.equals(name, other.name) &&
+                    Objects.equals(field, other.field) &&
                     Objects.equals(getter, other.getter) &&
                     Objects.equals(setter, other.setter) &&
                     Objects.equals(nested, other.nested);
@@ -146,19 +156,18 @@ public class PropertyAnalysis<A extends Annotation> {
         }
         
         /**
-         * Sets the {@link PropertyAnalysis#name} property on the {@link #property} instance under
-         * construction.
-         * @param name the property's name
+         * Sets the underlying {@link PropertyAnalysis#field} property on the {@link #property
+         * instance under construction}.
+         * @param field the property's underlying field.
          * @return the {@code Builder} instance, allows for method chaining.
          * @throws IllegalStateException if the property has already been set.
          */
-        public Builder<T> name(String name) {
-            if (property.name != null) {
-                throw new IllegalStateException("Name on property is already set");
+        public Builder<T> field(Field field) {
+            if (property.field != null) {
+                throw new IllegalStateException("Field on property is already set");
             }
             
-            property.name = name;
-            
+            property.field = field;
             return this;
         }
         
