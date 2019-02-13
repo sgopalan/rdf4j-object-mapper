@@ -16,6 +16,7 @@
 package com.github.kburger.rdf4j.objectmapper.api.reader;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
 
 public interface ArgumentStrategy<T> {
@@ -32,6 +33,6 @@ public interface ArgumentStrategy<T> {
     interface Factory {
         <T> boolean supports(Class<T> clazz);
         
-        <T> ArgumentStrategy<?> create(Class<T> field, int size);
+        ArgumentStrategy<?> create(Field field, int size);
     }
 }

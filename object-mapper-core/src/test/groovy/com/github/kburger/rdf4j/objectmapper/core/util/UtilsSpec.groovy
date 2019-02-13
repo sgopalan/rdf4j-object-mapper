@@ -19,6 +19,7 @@ import static com.github.kburger.rdf4j.objectmapper.test.util.TestUtils.*
 import com.github.kburger.rdf4j.objectmapper.test.CollectionClasses.RawCollectionClass
 import com.github.kburger.rdf4j.objectmapper.test.CollectionClasses.StringCollectionClass
 import com.github.kburger.rdf4j.objectmapper.test.CollectionClasses.WildcardCollectionClass
+import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.IntegerLiteralClass
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.StringLiteralClass
 import spock.lang.Specification
 
@@ -42,7 +43,7 @@ class UtilsSpec extends Specification {
     
     def "test the generic stuff"() {
         expect:
-        Utils.resolveGenericTypeArgument(findMethod(type)) == result
+        Utils.resolveTypeArgument(findField(type)) == result
         
         where:
         type                    || result
@@ -50,5 +51,6 @@ class UtilsSpec extends Specification {
         WildcardCollectionClass || Object
         StringCollectionClass   || String
         StringLiteralClass      || String
+        IntegerLiteralClass     || Integer
     }
 }

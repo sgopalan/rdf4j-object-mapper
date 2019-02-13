@@ -15,14 +15,12 @@
  */
 package com.github.kburger.rdf4j.objectmapper.core.reader.argument
 
-import com.github.kburger.rdf4j.objectmapper.core.util.Utils
 import com.github.kburger.rdf4j.objectmapper.test.util.TestUtils
 import spock.lang.Specification
 
 abstract class BaseArgumentStrategySpec extends Specification {
     def create = { Class clz, String name = "value", int n = 1 ->
-        def field = TestUtils.findField(clz)
-        def type = Utils.resolveTypeArgument(field)
-        return factory.create(type, n)
+        def field = TestUtils.findField(clz, name)
+        return factory.create(field, n)
     }
 }

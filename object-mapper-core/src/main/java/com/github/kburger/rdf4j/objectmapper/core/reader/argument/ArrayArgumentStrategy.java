@@ -16,15 +16,16 @@
 package com.github.kburger.rdf4j.objectmapper.core.reader.argument;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectReaderException;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ArgumentStrategy;
 
 public class ArrayArgumentStrategy extends AbstractArgumentStrategy<Object[]> {
     private int index;
     
-    public ArrayArgumentStrategy(Class<?> type, int size) {
-        super(type);
-        value = (Object[])Array.newInstance(type, size);
+    public ArrayArgumentStrategy(Class<?> fieldType, int size) {
+        super(fieldType.getComponentType());
+        value = (Object[])Array.newInstance(this.type, size);
     }
     
     @Override
@@ -43,8 +44,8 @@ public class ArrayArgumentStrategy extends AbstractArgumentStrategy<Object[]> {
         }
         
         @Override
-        public <T> ArgumentStrategy<?> create(Class<T> field, int size) {
-            return new ArrayArgumentStrategy(field.getComponentType(), size);
+        public ArgumentStrategy<?> create(Field field, int size) {
+            return new ArrayArgumentStrategy(field.getType(), size);
         }
     }
 }

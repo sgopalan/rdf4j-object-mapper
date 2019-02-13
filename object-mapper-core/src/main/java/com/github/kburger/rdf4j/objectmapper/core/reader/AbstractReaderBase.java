@@ -37,7 +37,6 @@ import com.github.kburger.rdf4j.objectmapper.api.reader.ObjectReader;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ValueConverter;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalysis;
 import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
-import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
 
 public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.Context {
     protected static final ValueFactory FACTORY = SimpleValueFactory.getInstance();
@@ -83,16 +82,16 @@ public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.C
         // set type
         analysis.getType().ifPresent(property -> {
             property.getField().ifPresent(field -> {
-                    var types = model.filter(subject, RDF.TYPE, null);
-                    
-                    var argumentStrategy = createArgumentStrategy(field, types.size());
-                    
-                    types.stream()
-                            .map(Statement::getObject)
-                            .map(obj -> readObject(model, false, argumentStrategy.getType(), obj))
-                            .forEach(argumentStrategy::addValue);
-                    
-                    instanceStrategy.addProperty(property, argumentStrategy.build());
+                var types = model.filter(subject, RDF.TYPE, null);
+                
+                var argumentStrategy = createArgumentStrategy(field, types.size());
+                
+                types.stream()
+                        .map(Statement::getObject)
+                        .map(obj -> readObject(model, false, argumentStrategy.getType(), obj))
+                        .forEach(argumentStrategy::addValue);
+                
+                instanceStrategy.addProperty(property, argumentStrategy.build());
             });
         });
         
@@ -150,7 +149,7 @@ public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.C
         return argumentStrategies.stream()
                 .filter(factory -> factory.supports(field.getType()))
                 .findFirst()
-                .map(factory -> factory.create(Utils.resolveTypeArgument(field), size))
+                .map(factory -> factory.create(field, size))
                 .orElseThrow(() -> new ObjectReaderException("Could not find a supporting argument strategy"));
     }
     

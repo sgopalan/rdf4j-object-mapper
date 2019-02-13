@@ -17,10 +17,7 @@ package com.github.kburger.rdf4j.objectmapper.core.util;
 
 import java.lang.reflect.AnnotatedParameterizedType;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.WildcardType;
-import java.util.Collection;
 import java.util.regex.Pattern;
 
 /**
@@ -53,38 +50,19 @@ public final class Utils {
         return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
     
-    public static Class<?> resolveGenericTypeArgument(Method getter) {
-        var type = getter.getGenericReturnType();
-        
-        if (type instanceof ParameterizedType == false) {
-            // raw type
-            if (Collection.class.isAssignableFrom((Class<?>)type)) {
-                return Object.class;
-            }
-            
-            // non-generic type
-            return (Class<?>)type;
-        }
-
-        var actualTypeArguments = ((ParameterizedType)type).getActualTypeArguments();
-        
-        // wildcard type
-        if (actualTypeArguments[0] instanceof WildcardType) {
-            return Object.class;
-        }
-        
-        return (Class<?>)actualTypeArguments[0];
-    }
-    
     public static Class<?> resolveTypeArgument(Field field) {
         var annotatedType = field.getAnnotatedType();
         
+        // if no type arguments are given...
         if (annotatedType instanceof AnnotatedParameterizedType == false) {
             var type = (Class<?>)annotatedType.getType();
             
+            // ...but the type has type parameters
             if (type.getTypeParameters().length > 0) {
+                // raw type
                 return Object.class;
             } else {
+                // non-generic type
                 return type;
             }
         }
@@ -93,9 +71,11 @@ public final class Utils {
         var actualTypes = annotatedParameterizedType.getAnnotatedActualTypeArguments();
         
         if (actualTypes[0].getType() instanceof WildcardType) {
+            // wildcard type argument
             return Object.class;
         }
         
+        // actual concrete type argument
         return (Class<?>)actualTypes[0].getType();
     }
     

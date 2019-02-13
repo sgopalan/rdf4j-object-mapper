@@ -16,16 +16,35 @@
 package com.github.kburger.rdf4j.objectmapper.core.reader.argument;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ArgumentStrategy;
 import com.github.kburger.rdf4j.objectmapper.api.reader.InstanceStrategy;
+import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
 
 public class CollectionArgumentStrategy extends AbstractArgumentStrategy<Collection<Object>> {
-    public CollectionArgumentStrategy(Class<?> type, int size) {
-        super(type);
-        this.value = new ArrayList<>(size);
+    @SuppressWarnings("rawtypes")
+    private static final Map<Class<? extends Collection>, Function<Integer, ? extends Collection<Object>>> MAPPING;
+    private static final Function<Integer, ? extends Collection<Object>> DEFAULT = ArrayList::new;
+    
+    static {
+        MAPPING = new HashMap<>();
+        MAPPING.put(List.class, ArrayList::new);
+        MAPPING.put(Set.class, HashSet::new);
+    }
+    
+    public CollectionArgumentStrategy(Field field, int size) {
+        super(Utils.resolveTypeArgument(field));
+        
+        this.value = MAPPING.getOrDefault(field.getType(), DEFAULT).apply(size);
     }
     
     @Override
@@ -50,7 +69,7 @@ public class CollectionArgumentStrategy extends AbstractArgumentStrategy<Collect
         }
         
         @Override
-        public <T> ArgumentStrategy<?> create(Class<T> field, int size) {
+        public ArgumentStrategy<?> create(Field field, int size) {
             return new CollectionArgumentStrategy(field, size);
         }
     }
