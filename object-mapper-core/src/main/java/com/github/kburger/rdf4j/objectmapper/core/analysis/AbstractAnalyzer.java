@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import com.github.kburger.rdf4j.objectmapper.annotations.Subject;
 import com.github.kburger.rdf4j.objectmapper.annotations.Type;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalysis;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
 
 /**

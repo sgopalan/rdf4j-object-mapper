@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.kburger.rdf4j.objectmapper.core.analysis
+package com.github.kburger.rdf4j.objectmapper.api.analysis
 
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate
 import com.github.kburger.rdf4j.objectmapper.annotations.Subject
 import com.github.kburger.rdf4j.objectmapper.annotations.Type
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalysis
 import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis
 import spock.lang.Specification
 

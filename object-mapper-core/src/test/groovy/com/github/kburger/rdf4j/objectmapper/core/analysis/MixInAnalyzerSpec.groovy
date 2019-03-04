@@ -18,6 +18,7 @@ package com.github.kburger.rdf4j.objectmapper.core.analysis
 import static com.github.kburger.rdf4j.objectmapper.test.util.TestUtils.*
 import com.github.kburger.rdf4j.objectmapper.annotations.Subject
 import com.github.kburger.rdf4j.objectmapper.annotations.Type
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalysis
 import com.github.kburger.rdf4j.objectmapper.test.MixInClasses.DefaultProvidingMixIn
 import com.github.kburger.rdf4j.objectmapper.test.MixInClasses.DefaultSubjectMixIn
 import com.github.kburger.rdf4j.objectmapper.test.MixInClasses.DefaultTypeMixIn

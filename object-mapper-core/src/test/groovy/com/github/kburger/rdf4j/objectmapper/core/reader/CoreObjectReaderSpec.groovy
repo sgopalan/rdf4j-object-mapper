@@ -20,7 +20,7 @@ import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectReaderExceptio
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException
 import com.github.kburger.rdf4j.objectmapper.api.reader.StringValueConverter
 import com.github.kburger.rdf4j.objectmapper.core.SimpleModule
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer
+import com.github.kburger.rdf4j.objectmapper.core.analysis.CoreClassAnalyzer
 import com.github.kburger.rdf4j.objectmapper.core.reader.argument.CollectionArgumentStrategy
 import com.github.kburger.rdf4j.objectmapper.core.reader.argument.SingleArgumentStrategy
 import com.github.kburger.rdf4j.objectmapper.core.reader.instance.BeanInstanceStrategy
@@ -43,7 +43,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 class CoreObjectReaderSpec extends Specification {
-    @Shared analyzer = new ClassAnalyzer()
+    @Shared analyzer = new CoreClassAnalyzer()
     
     /** Subject under test. */
     def reader = new CoreObjectReader(analyzer)

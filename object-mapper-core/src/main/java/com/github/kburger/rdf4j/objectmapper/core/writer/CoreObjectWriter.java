@@ -22,8 +22,8 @@ import org.eclipse.rdf4j.model.Namespace;
 import org.eclipse.rdf4j.model.util.ModelBuilder;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.api.writer.ObjectWriter;
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
 
 /**
  * Core implementation of the {@link ObjectWriter} functionality.

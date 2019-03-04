@@ -23,7 +23,7 @@ import org.eclipse.rdf4j.rio.RDFFormat
 import org.eclipse.rdf4j.sail.memory.MemoryStore
 import com.github.kburger.rdf4j.objectmapper.api.reader.StringValueConverter
 import com.github.kburger.rdf4j.objectmapper.core.SimpleModule
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer
+import com.github.kburger.rdf4j.objectmapper.core.analysis.CoreClassAnalyzer
 import com.github.kburger.rdf4j.objectmapper.core.reader.argument.SingleArgumentStrategy
 import com.github.kburger.rdf4j.objectmapper.core.reader.instance.BeanInstanceStrategy
 import com.github.kburger.rdf4j.objectmapper.repository.reader.RepositoryObjectReader
@@ -33,7 +33,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 class RepositoryObjectWriterSpec extends Specification {
-    @Shared analyzer = new ClassAnalyzer()
+    @Shared analyzer = new CoreClassAnalyzer()
     
     /** Subject under test. */
     def writer = new RepositoryObjectWriter(analyzer)

@@ -29,14 +29,14 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import com.github.kburger.rdf4j.objectmapper.api.Module;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalysis;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectReaderException;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ArgumentStrategy;
 import com.github.kburger.rdf4j.objectmapper.api.reader.InstanceStrategy;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ObjectReader;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ValueConverter;
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalysis;
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
 
 public abstract class AbstractReaderBase<R> implements ObjectReader<R>, Module.Context {
     protected static final ValueFactory FACTORY = SimpleValueFactory.getInstance();

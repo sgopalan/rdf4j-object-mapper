@@ -32,9 +32,9 @@ import com.github.kburger.rdf4j.objectmapper.test.OptionalClasses.JavaOptionalSt
 import com.github.kburger.rdf4j.objectmapper.test.TypeClasses.SingleTypeClass
 import spock.lang.Specification
 
-class ClassAnalyzerSpec extends Specification {
+class CoreClassAnalyzerSpec extends Specification {
     /** Subject under test. */
-    def analyzer = new ClassAnalyzer()
+    def analyzer = new CoreClassAnalyzer()
     
     def "analyzing a JDK class"() {
         when: "a JDK class is analyzed"

@@ -19,7 +19,7 @@ import org.eclipse.rdf4j.model.util.ModelBuilder;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.util.Repositories;
 import org.eclipse.rdf4j.rio.RDFFormat;
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.core.writer.AbstractWriterBase;
 
 public class RepositoryObjectWriter extends AbstractWriterBase<Repository> {

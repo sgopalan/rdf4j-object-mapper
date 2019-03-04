@@ -21,8 +21,8 @@ import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.Rio;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectReaderException;
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
 
 public class CoreObjectReader extends AbstractReaderBase<Reader> {
     public CoreObjectReader(ClassAnalyzer analyzer) {

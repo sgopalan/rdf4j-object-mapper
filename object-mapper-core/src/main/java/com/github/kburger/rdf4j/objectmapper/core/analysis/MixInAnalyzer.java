@@ -27,6 +27,7 @@ import com.github.kburger.rdf4j.objectmapper.annotations.Subject;
 import com.github.kburger.rdf4j.objectmapper.annotations.Type;
 import com.github.kburger.rdf4j.objectmapper.annotations.ext.MixIn;
 import com.github.kburger.rdf4j.objectmapper.api.Module;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalysis;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
 
 public class MixInAnalyzer extends AbstractAnalyzer implements Module.Context {

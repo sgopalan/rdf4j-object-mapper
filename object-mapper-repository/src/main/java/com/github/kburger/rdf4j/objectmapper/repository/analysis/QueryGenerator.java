@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalysis;
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalysis;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalyzer;
 
 public class QueryGenerator {
     public static final String VAR_SUBJECT = "s";

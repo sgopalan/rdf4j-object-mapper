@@ -15,7 +15,7 @@
  */
 package com.github.kburger.rdf4j.objectmapper.repository.analysis
 
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer
+import com.github.kburger.rdf4j.objectmapper.core.analysis.CoreClassAnalyzer
 import com.github.kburger.rdf4j.objectmapper.test.LiteralClasses.StringLiteralClass
 import com.github.kburger.rdf4j.objectmapper.test.NestingClasses.NestingExampleClass
 import com.github.kburger.rdf4j.objectmapper.test.ValidationClasses.MixedRequiredClass
@@ -23,7 +23,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 class QueryGeneratorSpec extends Specification {
-    @Shared analyzer = new ClassAnalyzer()
+    @Shared analyzer = new CoreClassAnalyzer()
     
     /** Subject under test. */
     def generator = new QueryGenerator(analyzer)

@@ -33,16 +33,17 @@ import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
 import com.github.kburger.rdf4j.objectmapper.annotations.Subject;
 import com.github.kburger.rdf4j.objectmapper.annotations.Type;
 import com.github.kburger.rdf4j.objectmapper.annotations.ext.MixIn;
-import com.github.kburger.rdf4j.objectmapper.api.Module;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalysis;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
 import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
 
 /**
  * 
  */
-public class ClassAnalyzer extends AbstractAnalyzer implements Module.Context {
+public class CoreClassAnalyzer extends AbstractAnalyzer implements ClassAnalyzer {
     /** Logger instance. */
-    private static final Logger logger = LoggerFactory.getLogger(ClassAnalyzer.class);
+    private static final Logger logger = LoggerFactory.getLogger(CoreClassAnalyzer.class);
     
     /** Cached analysis results. */
     private final Map<Class<?>, ClassAnalysis> cache;
@@ -51,7 +52,7 @@ public class ClassAnalyzer extends AbstractAnalyzer implements Module.Context {
     /**
      * Constructs a new analyzer.
      */
-    public ClassAnalyzer() {
+    public CoreClassAnalyzer() {
         cache = Collections.synchronizedMap(new HashMap<>());
         mixInAnalyzer = new MixInAnalyzer();
     }
@@ -67,6 +68,7 @@ public class ClassAnalyzer extends AbstractAnalyzer implements Module.Context {
      * @return
      * @throws AnalysisException
      */
+    @Override
     public <T> ClassAnalysis analyze(Class<T> clazz) {
         return analyzeInternal(clazz, new Stack<>());
     }

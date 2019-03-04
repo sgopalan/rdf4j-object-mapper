@@ -19,7 +19,7 @@ import org.eclipse.rdf4j.query.QueryResults;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.util.Repositories;
 import org.eclipse.rdf4j.rio.RDFFormat;
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer;
+import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.core.reader.AbstractReaderBase;
 import com.github.kburger.rdf4j.objectmapper.repository.analysis.QueryGenerator;
 

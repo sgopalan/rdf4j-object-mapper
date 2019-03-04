@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.kburger.rdf4j.objectmapper.core.analysis;
+package com.github.kburger.rdf4j.objectmapper.api.analysis;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +21,6 @@ import java.util.Optional;
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
 import com.github.kburger.rdf4j.objectmapper.annotations.Subject;
 import com.github.kburger.rdf4j.objectmapper.annotations.Type;
-import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
 
 /**
  * An analysis of a class. The analysis contains metadata about the possible annotations on parts of

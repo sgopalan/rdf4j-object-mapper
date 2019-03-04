@@ -19,7 +19,7 @@ import org.eclipse.rdf4j.rio.RDFFormat
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectWriterException
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException
 import com.github.kburger.rdf4j.objectmapper.core.SimpleModule
-import com.github.kburger.rdf4j.objectmapper.core.analysis.ClassAnalyzer
+import com.github.kburger.rdf4j.objectmapper.core.analysis.CoreClassAnalyzer
 import com.github.kburger.rdf4j.objectmapper.core.writer.wrapper.GuavaOptionalWrapperStrategy
 import com.github.kburger.rdf4j.objectmapper.core.writer.wrapper.JavaOptionalWrapperStrategy
 import com.github.kburger.rdf4j.objectmapper.test.Constants
@@ -51,7 +51,7 @@ import spock.lang.Specification
 
 class CoreObjectWriterSpec extends Specification {
     /** Shared analyzer instance. */
-    @Shared analyzer = new ClassAnalyzer()
+    @Shared analyzer = new CoreClassAnalyzer()
     
     /** Subject under test. */
     def writer = new CoreObjectWriter(analyzer)
