@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.kburger.rdf4j.objectmapper.api.reader;
+package com.github.kburger.rdf4j.objectmapper.api;
 
 import org.eclipse.rdf4j.rio.RDFFormat;
-import com.github.kburger.rdf4j.objectmapper.api.Module;
 
 /**
- * 
- * @param <R>
+ *
+ * @param <R> source type
+ * @param <W> sink type
  */
-public interface ObjectReader<R> extends Module.Context {
-    /**
-     * 
-     * @param reader
-     * @param clazz
-     * @param subject
-     * @param format
-     * @return
-     */
-    <T> T read(R reader, Class<T> clazz, CharSequence subject, RDFFormat format);
+public interface ObjectMapper<R, W> {
+    void addModule(Module module);
+    
+    <T> T read(R source, Class<T> clazz, CharSequence subject, RDFFormat format);
+    
+    <T> void write(W sink, T object, CharSequence subject, RDFFormat format);
 }

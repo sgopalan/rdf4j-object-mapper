@@ -16,6 +16,7 @@
 package com.github.kburger.rdf4j.objectmapper.api.writer;
 
 import org.eclipse.rdf4j.rio.RDFFormat;
+import com.github.kburger.rdf4j.objectmapper.api.Module;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectWriterException;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException;
 
@@ -23,7 +24,7 @@ import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException;
  * API for object writers.
  * @param <W> the output sink type.
  */
-public interface ObjectWriter<W> {
+public interface ObjectWriter<W> extends Module.Context {
     /**
      * Writes the given {@code object} to the {@code writer} sink.
      * @param <T> the output source type.

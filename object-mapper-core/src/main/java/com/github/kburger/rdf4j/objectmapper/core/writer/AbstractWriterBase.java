@@ -26,7 +26,6 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import com.github.kburger.rdf4j.objectmapper.annotations.Predicate;
-import com.github.kburger.rdf4j.objectmapper.api.Module;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalysis;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectWriterException;
@@ -35,7 +34,7 @@ import com.github.kburger.rdf4j.objectmapper.api.writer.DatatypeWrapperStrategy;
 import com.github.kburger.rdf4j.objectmapper.api.writer.ObjectWriter;
 import com.github.kburger.rdf4j.objectmapper.core.util.Utils;
 
-public abstract class AbstractWriterBase<W> implements ObjectWriter<W>, Module.Context {
+public abstract class AbstractWriterBase<W> implements ObjectWriter<W> {
     /** Factory instance. */
     protected static final ValueFactory FACTORY = SimpleValueFactory.getInstance();
     
