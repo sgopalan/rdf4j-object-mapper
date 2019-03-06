@@ -17,8 +17,11 @@ package com.github.kburger.rdf4j.objectmapper.api.reader;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.ThreadSafe;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
 
+@NotThreadSafe
 public interface ArgumentStrategy<T> {
     Class<?> getType();
     
@@ -30,6 +33,7 @@ public interface ArgumentStrategy<T> {
         instanceStrategy.addProperty(property, build());
     }
     
+    @ThreadSafe
     interface Factory {
         <T> boolean supports(Class<T> clazz);
         

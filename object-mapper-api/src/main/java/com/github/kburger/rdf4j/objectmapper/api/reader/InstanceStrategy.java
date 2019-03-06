@@ -16,8 +16,11 @@
 package com.github.kburger.rdf4j.objectmapper.api.reader;
 
 import java.lang.annotation.Annotation;
+import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.ThreadSafe;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.PropertyAnalysis;
 
+@NotThreadSafe
 public interface InstanceStrategy {
     <T> void initialize(Class<T> clazz);
     
@@ -29,6 +32,7 @@ public interface InstanceStrategy {
     
     Object build();
     
+    @ThreadSafe
     interface Factory {
         <T> boolean supports(Class<T> clazz);
         

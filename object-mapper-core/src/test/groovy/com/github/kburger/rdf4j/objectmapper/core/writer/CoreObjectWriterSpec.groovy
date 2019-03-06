@@ -18,7 +18,7 @@ package com.github.kburger.rdf4j.objectmapper.core.writer
 import org.eclipse.rdf4j.rio.RDFFormat
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectWriterException
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException
-import com.github.kburger.rdf4j.objectmapper.core.SimpleModule
+import com.github.kburger.rdf4j.objectmapper.core.CoreModule
 import com.github.kburger.rdf4j.objectmapper.core.analysis.CoreClassAnalyzer
 import com.github.kburger.rdf4j.objectmapper.core.writer.wrapper.GuavaOptionalWrapperStrategy
 import com.github.kburger.rdf4j.objectmapper.core.writer.wrapper.JavaOptionalWrapperStrategy
@@ -238,8 +238,8 @@ class CoreObjectWriterSpec extends Specification {
     
     def "writing a java.util.Optional getter property"() {
         given:
-        new SimpleModule()
-                .addDatatypeWrapperStrategy(new JavaOptionalWrapperStrategy())
+        new CoreModule()
+                .add(new JavaOptionalWrapperStrategy())
                 .setup(writer)
         and:
         def object = new JavaOptionalStringClass()
@@ -254,8 +254,8 @@ class CoreObjectWriterSpec extends Specification {
     
     def "wiring a guava Optional getter property"() {
         given:
-        new SimpleModule()
-                .addDatatypeWrapperStrategy(new GuavaOptionalWrapperStrategy())
+        new CoreModule()
+                .add(new GuavaOptionalWrapperStrategy())
                 .setup(writer)
         and:
         def object = new GuavaOptionalStringClass()

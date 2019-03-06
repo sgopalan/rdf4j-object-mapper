@@ -22,9 +22,9 @@ import com.github.kburger.rdf4j.objectmapper.api.reader.InstanceStrategy
 import com.github.kburger.rdf4j.objectmapper.api.reader.ValueConverter
 import spock.lang.Specification
 
-class SimpleModuleSpec extends Specification {
+class CoreModuleSpec extends Specification {
     /** Subject under test. */
-    def module = new SimpleModule()
+    def module = new CoreModule()
     
     def "setting up a context with an empty module"() {
         given:
@@ -44,15 +44,15 @@ class SimpleModuleSpec extends Specification {
         def context = Mock(Context)
         
         when:
-        module.addInstanceStrategy(Mock(InstanceStrategy.Factory))
+        module.add(Mock(InstanceStrategy.Factory))
         and:
-        module.addArgumentStrategy(Mock(ArgumentStrategy.Factory))
+        module.add(Mock(ArgumentStrategy.Factory))
         and:
-        module.addValueConverter(Object, Mock(ValueConverter))
+        module.add(Object, Mock(ValueConverter))
         and:
-        module.addNamespace(Mock(Namespace))
+        module.add(Mock(Namespace))
         and:
-        module.addMixIn(Object, Object)
+        module.add(Object, Object)
         and:
         module.setup(context)
         

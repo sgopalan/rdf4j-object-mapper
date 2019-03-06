@@ -19,7 +19,7 @@ import org.eclipse.rdf4j.rio.RDFFormat
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ObjectReaderException
 import com.github.kburger.rdf4j.objectmapper.api.exceptions.ValidationException
 import com.github.kburger.rdf4j.objectmapper.api.reader.StringValueConverter
-import com.github.kburger.rdf4j.objectmapper.core.SimpleModule
+import com.github.kburger.rdf4j.objectmapper.core.CoreModule
 import com.github.kburger.rdf4j.objectmapper.core.analysis.CoreClassAnalyzer
 import com.github.kburger.rdf4j.objectmapper.core.reader.argument.CollectionArgumentStrategy
 import com.github.kburger.rdf4j.objectmapper.core.reader.argument.SingleArgumentStrategy
@@ -57,10 +57,10 @@ class CoreObjectReaderSpec extends Specification {
     def rdf = { ...lines -> Constants.RDF_HEADER + lines.join("\n") }
     
     def setup() {
-        def module = new SimpleModule()
-                .addInstanceStrategy(new BeanInstanceStrategy.Factory())
-                .addArgumentStrategy(new SingleArgumentStrategy.Factory())
-                .addValueConverter(String, { it } as StringValueConverter)
+        def module = new CoreModule()
+                .add(new BeanInstanceStrategy.Factory())
+                .add(new SingleArgumentStrategy.Factory())
+                .add(String, { it } as StringValueConverter)
         
         module.setup(reader)
     }
@@ -182,8 +182,8 @@ class CoreObjectReaderSpec extends Specification {
     
     def "reading a supported argument type"() {
         given: "a module providing the supporting argument strategy"
-        def module = new SimpleModule()
-                .addArgumentStrategy(new CollectionArgumentStrategy.Factory())
+        def module = new CoreModule()
+                .add(new CollectionArgumentStrategy.Factory())
         module.setup(reader)
         
         when: "the target class, which requires a specific argument strategy to be present, is read from input"
@@ -207,8 +207,8 @@ class CoreObjectReaderSpec extends Specification {
     
     def "reading a supported value converter"() {
         given: "a module providing the supporting value converter"
-        def module = new SimpleModule()
-                .addValueConverter(Integer, { Integer.parseInt(it) } as StringValueConverter)
+        def module = new CoreModule()
+                .add(Integer, { Integer.parseInt(it) } as StringValueConverter)
         module.setup(reader)
         and: "an input document that defines an integer type value"
         def input = rdf "ex:1 ex:value 1 ."

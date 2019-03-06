@@ -22,7 +22,7 @@ import org.eclipse.rdf4j.repository.sail.SailRepository
 import org.eclipse.rdf4j.rio.RDFFormat
 import org.eclipse.rdf4j.sail.memory.MemoryStore
 import com.github.kburger.rdf4j.objectmapper.api.reader.StringValueConverter
-import com.github.kburger.rdf4j.objectmapper.core.SimpleModule
+import com.github.kburger.rdf4j.objectmapper.core.CoreModule
 import com.github.kburger.rdf4j.objectmapper.core.analysis.CoreClassAnalyzer
 import com.github.kburger.rdf4j.objectmapper.core.reader.argument.SingleArgumentStrategy
 import com.github.kburger.rdf4j.objectmapper.core.reader.instance.BeanInstanceStrategy
@@ -69,10 +69,10 @@ class RepositoryObjectWriterSpec extends Specification {
         bean.value = "example"
         and:
         def reader = new RepositoryObjectReader(analyzer)
-        def module = new SimpleModule()
-                .addInstanceStrategy(new BeanInstanceStrategy.Factory())
-                .addArgumentStrategy(new SingleArgumentStrategy.Factory())
-                .addValueConverter(String, { it } as StringValueConverter)
+        def module = new CoreModule()
+                .add(new BeanInstanceStrategy.Factory())
+                .add(new SingleArgumentStrategy.Factory())
+                .add(String, { it } as StringValueConverter)
         module.setup(reader)
         
         when:
