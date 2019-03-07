@@ -15,10 +15,12 @@
  */
 package com.github.kburger.rdf4j.objectmapper.api;
 
+import java.util.ServiceLoader;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import com.github.kburger.rdf4j.objectmapper.api.analysis.ClassAnalyzer;
 import com.github.kburger.rdf4j.objectmapper.api.reader.ObjectReader;
 import com.github.kburger.rdf4j.objectmapper.api.writer.ObjectWriter;
+import com.github.kburger.rdf4j.objectmapper.spi.ModuleProvider;
 
 public abstract class AbstractObjectMapper<R, W> implements ObjectMapper<R, W> {
     protected final ClassAnalyzer analyzer;
@@ -29,6 +31,13 @@ public abstract class AbstractObjectMapper<R, W> implements ObjectMapper<R, W> {
         this.analyzer = analyzer;
         this.reader = reader;
         this.writer = writer;
+    }
+    
+    public void discover() {
+        ServiceLoader.load(ModuleProvider.class).forEach(provider -> {
+            var module = provider.get();
+            addModule(module);
+        });
     }
     
     @Override

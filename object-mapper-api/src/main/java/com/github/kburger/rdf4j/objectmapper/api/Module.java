@@ -25,13 +25,13 @@ import com.github.kburger.rdf4j.objectmapper.api.reader.ValueConverter;
 import com.github.kburger.rdf4j.objectmapper.api.writer.DatatypeWrapperStrategy;
 
 /**
- * Configuration module to extend receptive classes (through the {@link Context} interface) with
- * new components or mappings.
+ * Configuration module to extend receptive classes (through the {@link Module.Context} interface)
+ * with new components or mappings.
  */
 public interface Module {
     /**
-     * Setup the receptive module {@link Context} and apply all the registered configured component
-     * to the implementing context.
+     * Setup the receptive module {@link Module.Context} and apply all the registered configured
+     * components to the implementing context.
      * @param context the implementing context.
      */
     void setup(Context context);
